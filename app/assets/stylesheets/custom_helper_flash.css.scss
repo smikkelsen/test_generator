@@ -1,0 +1,144 @@
+$notice_background_color: #ecebee;
+$notice_border_color: #000000;
+$notice_color: #000000;
+
+$message_background_color: #a5d98e;
+$message_border_color: #273A18;
+$message_color: #273A18;
+
+$error_background_color: #E45053;
+$error_border_color: #8C1217;
+$error_color: #FFF;
+
+$warning_background_color: #FFF1A6;
+$warning_border_color: #9D6C32;
+$warning_color: #9D6C32;
+
+$all_margin_top: 10px;
+$all_padding: 2px;
+$all_border: 2px solid;
+$all_border_radius: 10px;
+@mixin all_border_radius {
+  -webkit-border-radius: $all_border_radius;
+  -moz-border-radius: $all_border_radius;
+  border-radius: $all_border_radius;
+}
+
+@mixin heading_properties {
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+}
+
+div.custom_helper_flash {
+
+  margin: 10px auto;
+  text-align: left;
+  // This is the width of the outer div, you may need to change this per location used
+  width: 90%;
+  padding: 10px;
+  font-weight: bold;
+
+  ul {
+    padding-left: 50px !important;
+    li {
+      font-size: .9em !important;
+      list-style: circle !important;
+      text-align: left !important;
+      margin: 0 0 4px 0 !important;
+    }
+  }
+
+  h1 {
+    @include heading_properties;
+    font-size: 2em !important;
+    background-color: transparent !important;
+  }
+
+  h2 {
+    @include heading_properties;
+    font-size: 1.8em !important;
+    background-color: transparent !important;
+  }
+
+  h3 {
+    @include heading_properties;
+    font-size: 1.6em !important;
+    background-color: transparent !important;
+  }
+
+  h4 {
+    @include heading_properties;
+    font-size: 1.4em !important;
+    background-color: transparent !important;
+  }
+
+  h5 {
+    @include heading_properties;
+    font-size: 1.2em !important;
+    background-color: transparent !important;
+  }
+
+  h6 {
+    @include heading_properties;
+    font-size: 1em !important;
+    background-color: transparent !important;
+  }
+
+  .error {
+    margin-top: $all_margin_top;
+    padding: $all_padding;
+    background: $error_background_color;
+    border: $all_border $error_border_color;
+    color: $error_color;
+    @include all_border_radius;
+    h1, h2, h3, h4, h5, h6 {
+      color: $error_color !important;
+    }
+  }
+
+  .notice {
+    margin-top: $all_margin_top;
+    padding: $all_padding;
+    background: $notice_background_color;
+    border: $all_border $notice_border_color;
+    color: $notice_color;
+    @include all_border_radius;
+    h1, h2, h3, h4, h5, h6 {
+      color: $notice_color !important;
+    }
+  }
+
+  .warning {
+    margin-top: $all_margin_top;
+    padding: $all_padding;
+    background: $warning_background_color;
+    border: $all_border $warning_border_color;
+    color: $warning_color;
+    @include all_border_radius;
+    h1, h2, h3, h4, h5, h6 {
+      color: $warning_color !important;
+    }
+  }
+
+  .message {
+    margin-top: $all_margin_top;
+    padding: $all_padding;
+    background: $message_background_color;
+    border: $all_border $message_border_color;
+    color: $message_color;
+    @include all_border_radius;
+    h1, h2, h3, h4, h5, h6 {
+      color: $message_color !important;
+    }
+  }
+}
+
+div.field_with_errors {
+  display: inline;
+  input {
+    padding: 2px;
+    background-color: $error_background_color;
+    color: $error_color;
+  }
+}

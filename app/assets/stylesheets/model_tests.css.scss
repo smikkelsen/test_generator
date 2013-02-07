@@ -1,0 +1,27 @@
+// Place all the styles related to the ModelTests controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.float_left {
+  float:left;
+}
+
+.float_right {
+  float:right;
+}
+
+.clear_float {
+  clear:both;
+}
+
+.column {
+  margin: 0px 8px;
+}
+
+.fields {
+  margin: 6px 0px;
+}
+
+.add_nested_fields image {
+  margin-top: 15px;
+}

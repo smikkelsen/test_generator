@@ -1,0 +1,71 @@
+<span class="pm_category_help_hide clickable float_right"><%= image_tag('delete-icon24x24.png') %></span>
+
+<h3>What is a category?</h3>
+
+<p>
+  Think of a category as a section of functionality that a project should have.<br><br>
+  For example, if your project is an ecommerce website where you can keep track of product inventory to display on
+  the site, the customers that purchase, and the orders that belong to each customer, then you can break that into
+  3
+  different categories to start with.
+</p>
+
+<h3>Product Category</h3>
+
+<p>
+  In this category, you might want the website to keep track of the following:
+<ul>
+  <li>Product Name</li>
+  <li>Price</li>
+  <li>Quantity Available</li>
+  <li>Sku Number</li>
+  <li>Description</li>
+</ul>
+<p>
+  You can take that a little further and say that the Product Name is required (you would not want to be able to
+  add
+  a new product
+  that did not have a name). You can say the same about price, and probably sku number. You can say that the sku
+  number must
+  be unique, and that the description must be at least 32 characters long if someone wants to add one.
+</p>
+
+<h3>Customer Category</h3>
+
+<p>
+  This category should have a relationship on it. Remember that the customer will have many orders (or could
+  potentially have many orders).
+  <br><br>
+  In this category, you might want the website to keep track of the following:
+<ul>
+  <li>First Name</li>
+  <li>Last Name</li>
+  <li>Phone Number</li>
+  <li>Address</li>
+  <li>Email</li>
+  <li>Password</li>
+</ul>
+<p>
+  The Email should be unique so that the same person cannot create two seperate accounts. The First and Last name
+  must be at least 3 characters, and the phone number cannot be greater than 10 digits.
+</p>
+
+<h3>Order Category</h3>
+
+<p>
+  This category should have a relationship on it as well. Each order should belong to a customer.
+</p>
+
+<p>
+  You might want the orders to keep track of the following:
+</p>
+<ul>
+  <li>Order number</li>
+  <li>Order Total</li>
+  <li>Order Date / Time</li>
+</ul>
+<p>
+  The order number should be unique on this category.
+</p>
+
+<span class="pm_category_help_hide clickable float_right"><%= image_tag('delete-icon24x24.png') %></span>

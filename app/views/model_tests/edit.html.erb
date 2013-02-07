@@ -1,0 +1,16 @@
+<div id="model_test_panel" class="panel">
+
+  <div id="panel-wrapper">
+    <div id='panel-body'>
+      <center><h2>Edit <%= @model_test.name %></h2></center>
+      <%= link_to (image_tag "back-arrow64x64.png", :class => "back_arrow"), project_path(@model_test.project_id) %>
+
+      <% if session[:role] == "dev" %>
+          <%= render 'form_dev' %>
+      <% else %>
+          <%= render 'form_pm' %>
+      <% end %>
+
+    </div>
+  </div>
+</div>

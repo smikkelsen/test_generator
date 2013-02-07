@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: MyString
+  db_index: false
+  required: false
+  unique: false
+  mass_assign: false
+  min_length: 1
+  max_length: 1
+
+two:
+  name: MyString
+  db_index: false
+  required: false
+  unique: false
+  mass_assign: false
+  min_length: 1
+  max_length: 1

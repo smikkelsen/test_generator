@@ -1,0 +1,90 @@
+<%= nested_form_for(@model_test, :html => {:style => 'width:100%;'}) do |f| %>
+    <%= flash_helper(@model_test) %>
+    <h3><span>Model Name</span></h3>
+    <%= f.text_field :name %>
+
+    <h3><span>Add Associations</span></h3>
+
+    <div id="associations" class="nested_form_attributes inset">
+      <%= f.fields_for :model_associations do |builder| %>
+          <div class="float_left column">
+            <%= builder.label :relationship_type %>
+            <br>
+            <%= builder.select :relationship_type, options_for_select(ModelAssociation::TYPE_OPTIONS, builder.object.relationship_type) %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :related_model_test_id %>
+            <br>
+            <%= builder.select :related_model_test_id, options_from_collection_for_select(ModelTest.find_all_by_project_id(@model_test.project_id).select { |mt| mt.id != @model_test.id }, "id", "name", builder.object.related_model_test_id) %>
+          </div>
+          <div class="float_left column">
+            <br>
+            <!--<%= image_tag "delete-icon24x24.png", :class => "btnDel clickable" %>-->
+            <%= builder.link_to_remove image_tag "delete-icon24x24.png" %>
+          </div>
+          <br class="clear_float">
+      <% end %>
+      <%= f.link_to_add image_tag('add-icon.png'), :model_associations %>
+
+    </div>
+
+    <h3><span>Add Table Columns</span></h3>
+
+    <div id="columns" class="nested_form_attributes inset">
+      <%= f.fields_for :model_columns do |builder| %>
+          <div class="float_left column">
+            <%= builder.label :name %>
+            <br>
+            <%= builder.text_field :name, :size => 15, :class => "medium" %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :mass_assign %>
+            <br>
+            <%= builder.check_box :mass_assign %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :required %>
+            <br>
+            <%= builder.select :required, options_for_select(ModelColumn::REQUIRED_OPTIONS, builder.object.required) %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :unique %>
+            <br>
+            <%= builder.check_box :unique %>
+          </div>
+
+          <div class="float_left column">
+            <%= builder.label :db_index %>
+            <br>
+            <%= builder.check_box :db_index %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :min_length %>
+            <br>
+            <%= builder.text_field :min_length, :size => 4, :class => "tiny" %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :max_length %>
+            <br>
+            <%= builder.text_field :max_length, :size => 4, :class => "tiny" %>
+          </div>
+          <div class="float_left column">
+            <br>
+            <!--<%= image_tag "delete-icon24x24.png", :class => "btnDel clickable" %>-->
+            <%= builder.link_to_remove image_tag "delete-icon24x24.png" %>
+          </div>
+          <br class="clear_float">
+      <% end %>
+      <%= f.link_to_add image_tag('add-icon.png'), :model_columns %>
+
+    </div>
+
+    <br><br>
+    <%= f.hidden_field :project_id %>
+    <%= f.submit "Save" %>
+
+    <p>
+      <%= @result %>
+    </p>
+
+<% end %>

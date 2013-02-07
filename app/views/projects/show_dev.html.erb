@@ -1,0 +1,50 @@
+<div id="model_test_panel" class="panel">
+
+  <div id="panel-wrapper">
+    <div id='panel-body'>
+      <center><h2><%= @project.name %></h2></center>
+      <%= link_to (image_tag "back-arrow64x64.png", :class => "back_arrow"), projects_path %>
+
+      <p>
+        <b>Description:</b>
+        <%= @project.description %>
+      </p>
+
+      <p>
+        <b>Project manager:</b>
+        <%= @project.project_manager %>
+      </p>
+
+      <p>
+        <b>Developer:</b>
+        <%= @project.developer %>
+      </p>
+
+
+      <%= link_to 'Edit', edit_project_path(@project) %>
+      <table style="width:100%;">
+        <tr>
+          <th>Model Tests</th>
+          <th>Controller Tests</th>
+        </tr>
+        <tr>
+          <td>
+            <%= render 'model_tests/index' %>
+          </td>
+          <td>
+            <%= render 'model_tests/index' %>
+          </td>
+        </tr>
+        <tr>
+          <td><%= link_to image_tag('add-icon.png'), new_model_test_path(:model_test => { :project_id => @project.id }) %></td>
+
+
+          <td><%= link_to image_tag('add-icon.png'), new_model_test_path(:model_test => { :project_id => @project.id }) %></td>
+        </tr>
+      </table>
+
+
+    </div>
+  </div>
+
+</div>

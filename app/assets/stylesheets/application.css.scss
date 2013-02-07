@@ -1,0 +1,18 @@
+@import "custom_helper_flash";
+@import "panel";
+@import "model_tests";
+@import "projects";
+
+.field_with_errors select {
+  background: #E45053;
+  color: white;
+}
+
+.clickable {
+  cursor: hand;
+  cursor: pointer;
+}
+
+.back_arrow {
+  margin-top: -150px;
+}

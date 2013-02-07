@@ -1,0 +1,39 @@
+<div id="model_test_panel" class="panel">
+
+  <div id="panel-wrapper">
+    <div id='panel-body'>
+      <center><h2>Model Test Generator</h2></center>
+
+      <%= form_tag('/generate_link', :id => 'test_keys', :style => 'width:100%') do %>
+          <%= flash_helper() %>
+
+          <h3>Add Table Columns</h3>
+          <%= text_field_tag 'column[0]', params['column'][0], :style => "width:40%;" %> <%= image_tag "delete-icon24x24.png", :class => "btnDel", :id => "0" %>
+
+          <input type="button" id="btnAdd" value="add another name" />
+          <input type="button" id="btnDel" value="remove name" />
+          <%= submit_tag 'Add', id=>'btnAdd' %>
+
+          <%= label_tag 'host', 'Select Environment' %> <br>
+          <%= select_tag 'host', options_for_select(@hosts, params['host']) %>
+          <br><br>
+          <%= label_tag 'sku', 'Select product' %> <br>
+          <%= select_tag 'sku', options_for_select(@products, params['sku']) %>
+          <br><br>
+          <%= label_tag 'price', 'Enter price for this product (This will determine checkout price)' %><br>
+          <%= text_field_tag 'price', params['price'], :style => "width:40%;" %>
+          <br><br>
+          <%= label_tag 'redirect_url', 'Enter Redirect URL (must be fully qualified - ie: https://www.google.com)' %><br>
+          <%= text_field_tag 'redirect_url', params['redirect_url'], :style => "width:100%;" %>
+          <br><br>
+          <input type="submit" name="submit">
+
+          <p>
+            <%= @results %>
+          </p>
+
+      <% end %>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,28 @@
+<%= form_for(@project) do |f| %>
+    <%= flash_helper(@project) %>
+
+    <div class="field">
+      <%= f.label :name %>
+      <br/>
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <%= f.label :project_manager %>
+      <br/>
+      <%= f.text_field :project_manager %>
+    </div>
+    <div class="field">
+      <%= f.label :developer %>
+      <br/>
+      <%= f.text_field :developer %>
+    </div>
+    <div class="field">
+      <%= f.label :description %>
+      <br/>
+      <%= f.text_field :description %>
+    </div>
+    <div class="actions">
+      <%= f.hidden_field :ip_address %>
+      <%= f.submit %>
+    </div>
+<% end %>

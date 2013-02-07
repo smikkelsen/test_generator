@@ -1,0 +1,20 @@
+<div id="model_test_panel" class="panel">
+
+  <div id="panel-wrapper">
+    <div id='panel-body'>
+      <center><h2>Who are you?</h2></center>
+      <%= flash_helper() %>
+      <%= form_tag root_path do |f| %>
+          <table style="margin: 0 auto;">
+            <tr>
+              <td><%= submit_tag "pm", :type => :image, :src => "/assets/pm.png", :style => "margin:0px 20px;" %></td>
+              <td><%= submit_tag "dev", :type => :image, :src => "/assets/developer.png", :style => "margin:0px 20px;" %></td>
+            </tr>
+          </table>
+      <% end %>
+
+    </div>
+  </div>
+
+</div>
+

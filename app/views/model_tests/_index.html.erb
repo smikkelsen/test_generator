@@ -1,0 +1,17 @@
+<table style="width:100%; border: 1px solid #ddd">
+  <tr>
+    <th>Name</th>
+    <th>Created</th>
+    <th>Last Updated</th>
+    <th></th>
+  </tr>
+
+  <% @model_tests.each do |model_test| %>
+      <tr>
+        <td><%= link_to model_test.name, edit_model_test_path(model_test) %></td>
+        <td><%= model_test.created_at.strftime("%m/%d/%Y %I:%M") %></td>
+        <td><%= model_test.updated_at.strftime("%m/%d/%Y %I:%M") %></td>
+        <td><%= link_to (image_tag "delete-icon24x24.png"), model_test, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+      </tr>
+  <% end %>
+</table>

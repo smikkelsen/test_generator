@@ -4,9 +4,9 @@ class ProjectsController < ApplicationController
 # Root URL
   def choose_role
     if params['commit']
-      cookies['role'] = {
+      cookies['tester'] = {
           :value => params['commit'],
-          :expires => Time.now + 30.days
+          :expires => Time.now + 30.days,
       }
     end
     @role = cookies['role']

@@ -4,14 +4,12 @@
     <div id='panel-body'>
       <center><h2>Who are you?</h2></center>
       <%= flash_helper() %>
-      <%= form_tag root_path do |f| %>
           <table style="margin: 0 auto;">
             <tr>
-              <td><%= submit_tag "pm", :type => :image, :src => "/assets/pm.png", :style => "margin:0px 20px;" %></td>
-              <td><%= submit_tag "dev", :type => :image, :src => "/assets/developer.png", :style => "margin:0px 20px;" %></td>
+              <td><%= link_to (image_tag 'pm.png', :style => 'margin:0px 20px;'), '/set_role/pm' %></td>
+              <td><%= link_to (image_tag 'developer.png', :style => 'margin:0px 20px;'), '/set_role/dev' %></td>
             </tr>
           </table>
-      <% end %>
 
     </div>
   </div>

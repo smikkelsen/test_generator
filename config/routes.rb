@@ -4,8 +4,8 @@ TestGenerator::Application.routes.draw do
 
   resources :model_tests, :except => [:show, :index]
 
-
-  root :to => "projects#choose_role"
+  match 'set_role/:role' => 'projects#set_role', :as => 'set_role'
+  root :to => "projects#set_role"
 
   resources 'model_test', :only => [:new, :create, :update, :destroy]
   #get '/model' => 'generator#model'

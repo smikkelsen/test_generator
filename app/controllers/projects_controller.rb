@@ -1,15 +1,11 @@
 class ProjectsController < ApplicationController
 
-  before_filter :set_role, :except => [:choose_role]
+  before_filter :force_role, :except => [:set_role]
 # Root URL
-  def choose_role
-    cookies['setalways'] = {
-        :value => 'hey it worked',
-        :expires => Time.now + 30.days
-    }
-    if params['commit']
-      cookies['tester'] = {
-          :value => params['commit'],
+  def set_role
+    if params['role']
+      cookies['role'] = {
+          :value => params['role'],
           :expires => Time.now + 30.days
       }
     end
@@ -17,6 +13,8 @@ class ProjectsController < ApplicationController
 
     if @role == 'dev' || @role == 'pm'
       redirect_to :action => :index
+    else
+      render '/application/choose_role'
     end
   end
 
@@ -90,11 +88,11 @@ class ProjectsController < ApplicationController
 
   protected
 
-  def set_role
+  def force_role
     @role = cookies['role']
 
     unless @role
-      redirect_to :action => :choose_role
+      redirect_to :action => :set_role
     end
   end
 end

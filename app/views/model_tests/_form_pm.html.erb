@@ -41,7 +41,7 @@
           <div class="float_left column">
             <%= builder.label :required %>
             <br>
-            <%= builder.select :required, options_for_select(ModelColumn::REQUIRED_OPTIONS_PM, builder.object.required) %>
+            <%= builder.check_box :required %>
           </div>
           <div class="float_left column">
             <%= builder.label :unique, "Must be Unique" %>

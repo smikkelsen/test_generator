@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'easy_flash', :path => '~/Dropbox/RubymineProjects/gems'
+#gem 'easy_flash', :path => '~/Dropbox/RubymineProjects/gems'
 gem 'rails', '3.2.8'
 
 # Bundle edge Rails instead:

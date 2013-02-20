@@ -38,6 +38,11 @@
             <%= builder.text_field :name, :size => 15, :class => "medium" %>
           </div>
           <div class="float_left column">
+            <%= builder.label :data_type %>
+            <br>
+            <%= builder.select :data_type, options_for_select(ModelColumn::DATA_TYPE_OPTIONS, builder.object.data_type) %>
+          </div>
+          <div class="float_left column">
             <%= builder.label :mass_assign %>
             <br>
             <%= builder.check_box :mass_assign %>
@@ -45,7 +50,7 @@
           <div class="float_left column">
             <%= builder.label :required %>
             <br>
-            <%= builder.select :required, options_for_select(ModelColumn::REQUIRED_OPTIONS, builder.object.required) %>
+            <%= builder.check_box :required %>
           </div>
           <div class="float_left column">
             <%= builder.label :unique %>

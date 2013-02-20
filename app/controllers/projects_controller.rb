@@ -25,7 +25,7 @@ class ProjectsController < ApplicationController
   def show
     @project = Project.find(params[:id])
     @model_tests = ModelTest.find_all_by_project_id(@project.id)
-    if cookie[:role] == 'dev'
+    if @role == 'dev'
       render 'show_dev'
     else
       render 'show_pm'

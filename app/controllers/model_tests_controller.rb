@@ -109,7 +109,7 @@ class ModelTestsController < ApplicationController
         when "have_and_belong_to_many"
           tb = related_table_name.pluralize
         when "belong_to"
-          tb = related_table_name.singularize s
+          tb = related_table_name.singularize
         else
           tb = related_table_name.singularize
       end

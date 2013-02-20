@@ -3,11 +3,14 @@ class ProjectsController < ApplicationController
   before_filter :set_role, :except => [:choose_role]
 # Root URL
   def choose_role
-    cookies['setalways'] = 'hey it worked'
+    cookies['setalways'] = {
+        :value => 'hey it worked',
+        :expires => Time.now + 30.days
+    }
     if params['commit']
       cookies['tester'] = {
           :value => params['commit'],
-          :expires => Time.now + 30.days,
+          :expires => Time.now + 30.days
       }
     end
     @role = cookies['role']

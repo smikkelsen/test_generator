@@ -1,5 +1,7 @@
 class ModelTestsController < ApplicationController
 
+  before_filter :set_role
+
   # GET /model_tests/new
   def new
     @model_test = ModelTest.new(params[:model_test])
@@ -12,7 +14,7 @@ class ModelTestsController < ApplicationController
   def edit
     @model_test = ModelTest.find(params[:id])
     @model_tests = ModelTest.find_all_by_project_id(@model_test.project_id)
-    if session[:role] == "dev"
+    if @role == "dev"
       @result = "<h3>Rspec Tests</h3><textarea style='width:98%; height:200px'>"
       build_model_tests
       @result += "</textarea>"
@@ -26,7 +28,7 @@ class ModelTestsController < ApplicationController
     @model_test = ModelTest.new(params[:model_test])
 
     if @model_test.save
-      if session[:role] == "dev"
+      if @role == "dev"
         redirect_to action: "edit"
       else
         redirect_to project_path(@model_test.project_id)
@@ -41,7 +43,7 @@ class ModelTestsController < ApplicationController
     @model_test = ModelTest.find(params[:id])
     @model_test.update_attributes(params[:model_test])
     inspect_obj "model_test", @model_test.model_associations
-    if session[:role] == "dev"
+    if @role == "dev"
       redirect_to action: "edit"
     else
       redirect_to project_path(@model_test.project_id)
@@ -62,6 +64,15 @@ class ModelTestsController < ApplicationController
   #                          Protected Methods
   # ===================================================================
   protected
+
+  def set_role
+    @role = cookies['role']
+
+    raise 'No Role Set' if @role.nil?
+
+  rescue
+    redirect_to root_path
+  end
 
   # ====================================================
   #                Test Methods

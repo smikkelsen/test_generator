@@ -21,44 +21,44 @@ class ApplicationController < ActionController::Base
 
   end
 
-  def set_error(error, tag = 'li')
-    set_flash(:error, error, tag)
-  end
-
-  def set_notice(notice, tag = 'li')
-    set_flash(:notice, notice, tag)
-  end
-
-  def set_warning(warning, tag = 'li')
-    set_flash(:warning, warning, tag)
-  end
-
-  def set_message(message, tag = 'li')
-    set_flash(:message, message, tag)
-  end
-
-  def empty_error()
-    flash[:error] = nil
-  end
-
-  def empty_notice()
-    flash[:notice] = nil
-  end
-
-  def empty_warning()
-    flash[:warning] = nil
-  end
-
-  def empty_message()
-    flash[:message] = nil
-  end
-
-  def empty_all_flash()
-    empty_error
-    empty_message
-    empty_notice
-    empty_warning
-  end
+  #def set_error(error, tag = 'li')
+  #  set_flash(:error, error, tag)
+  #end
+  #
+  #def set_notice(notice, tag = 'li')
+  #  set_flash(:notice, notice, tag)
+  #end
+  #
+  #def set_warning(warning, tag = 'li')
+  #  set_flash(:warning, warning, tag)
+  #end
+  #
+  #def set_message(message, tag = 'li')
+  #  set_flash(:message, message, tag)
+  #end
+  #
+  #def empty_error()
+  #  flash[:error] = nil
+  #end
+  #
+  #def empty_notice()
+  #  flash[:notice] = nil
+  #end
+  #
+  #def empty_warning()
+  #  flash[:warning] = nil
+  #end
+  #
+  #def empty_message()
+  #  flash[:message] = nil
+  #end
+  #
+  #def empty_all_flash()
+  #  empty_error
+  #  empty_message
+  #  empty_notice
+  #  empty_warning
+  #end
 
 
   protected
@@ -67,29 +67,29 @@ class ApplicationController < ActionController::Base
   #     set_flash   = used by flash helper methods. Sets text to session
   # ---------------------------------------------------------------------------------
 
-  def set_flash(type, message, tag)
-    tag_1, tag_2 = set_tag(tag)
-    if flash[type].nil?
-      flash[type] = ["#{tag_1}#{message}#{tag_2}"]
-    else
-      flash[type] << "#{tag_1}#{message}#{tag_2}"
-    end
-  end
-
-  def set_tag(tag)
-
-    case tag
-
-      when 'br'
-        tag_1 = ''
-        tag_2 = '<br />'
-      else
-        tag_1 = "<#{tag}>"
-        tag_2 = "</#{tag}>"
-
-    end
-    return tag_1, tag_2
-  end
+  #def set_flash(type, message, tag)
+  #  tag_1, tag_2 = set_tag(tag)
+  #  if flash[type].nil?
+  #    flash[type] = ["#{tag_1}#{message}#{tag_2}"]
+  #  else
+  #    flash[type] << "#{tag_1}#{message}#{tag_2}"
+  #  end
+  #end
+  #
+  #def set_tag(tag)
+  #
+  #  case tag
+  #
+  #    when 'br'
+  #      tag_1 = ''
+  #      tag_2 = '<br />'
+  #    else
+  #      tag_1 = "<#{tag}>"
+  #      tag_2 = "</#{tag}>"
+  #
+  #  end
+  #  return tag_1, tag_2
+  #end
 
   def print_formatted_to_log(heading = nil, print = nil)
     # set vars

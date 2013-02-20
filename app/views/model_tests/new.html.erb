@@ -3,7 +3,7 @@
   <div id="panel-wrapper">
     <div id='panel-body'>
       <center><h2>New
-        <% if session[:role] == "dev" %>
+        <% if @role == "dev" %>
             Model
         <% else %>
             Category
@@ -11,7 +11,7 @@
       </h2></center>
       <%= link_to (image_tag "back-arrow64x64.png", :class => "back_arrow"), project_path(@model_test.project_id) %>
 
-      <% if session[:role] == "dev" %>
+      <% if @role == "dev" %>
           <%= render 'form_dev' %>
       <% else %>
           <%= render 'form_pm' %>

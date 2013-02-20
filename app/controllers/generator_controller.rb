@@ -1,5 +1,7 @@
 class GeneratorController < ApplicationController
 
+  before_filter :set_role
+
   def choose
     @model_tests = ModelTest.find_all_by_ip_address(request.remote_ip)
 
@@ -31,4 +33,13 @@ class GeneratorController < ApplicationController
   end
 
 
+  protected
+  def set_role
+    @role = cookies['role']
+
+    raise "No Role Set" if @role.nil?
+
+  rescue
+    redirect_to root_path
+  end
 end

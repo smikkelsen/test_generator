@@ -4,10 +4,14 @@ class ProjectsController < ApplicationController
 # Root URL
   def choose_role
     if params['commit']
-      session[:role] = params['commit']
+      cookies['role'] = {
+          :value => params['commit'],
+          :expires => Time.now + 30.days
+      }
     end
+    @role = cookies['role']
 
-    if session[:role] == 'dev' || session[:role] == 'pm'
+    if @role == 'dev' || @role == 'pm'
       redirect_to :action => :index
     end
   end
@@ -21,10 +25,10 @@ class ProjectsController < ApplicationController
   def show
     @project = Project.find(params[:id])
     @model_tests = ModelTest.find_all_by_project_id(@project.id)
-    if session[:role] == "dev"
-      render "show_dev"
+    if cookie[:role] == 'dev'
+      render 'show_dev'
     else
-      render "show_pm"
+      render 'show_pm'
     end
   end
 
@@ -48,7 +52,7 @@ class ProjectsController < ApplicationController
         format.html { redirect_to @project, notice: 'Project was successfully created.' }
         format.json { render json: @project, status: :created, location: @project }
       else
-        format.html { render action: "new" }
+        format.html { render action: 'new' }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
@@ -63,7 +67,7 @@ class ProjectsController < ApplicationController
         format.html { redirect_to @project, notice: 'Project was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: "edit" }
+        format.html { render action: 'edit' }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
@@ -83,7 +87,9 @@ class ProjectsController < ApplicationController
   protected
 
   def set_role
-    unless session[:role]
+    @role = cookies['role']
+
+    unless @role
       redirect_to :action => :choose_role
     end
   end

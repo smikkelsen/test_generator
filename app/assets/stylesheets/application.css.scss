@@ -17,6 +17,7 @@
   margin-top: -150px;
 }
 
-img:a {
-  border-width: 0;
+a img {
+  border: 0;
+  outline: none;
 }

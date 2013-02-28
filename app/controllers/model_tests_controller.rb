@@ -163,7 +163,13 @@ class ModelTestsController < ApplicationController
   def model_uniqueness_test
     @result += "    context 'Uniqueness' do\r"
     @model_test.model_columns.each do |col|
-      @result += "      it { should validate_uniqueness_of :#{col.name} }\r" if col.unique
+      if col.unique
+        @result += "      it { should validate_uniqueness_of :#{col.name} }\r"
+        @result += "      it { should have_db_index(:#{col.name}).unique(true) }\r"
+      else
+        @result += "      it { should_not validate_uniqueness_of :#{col.name} }\r"
+        @result += "      it { should_not have_db_index(:#{col.name}).unique(true) }\r"
+      end
     end
     @result += "    end\r\r"
   end
@@ -210,11 +216,9 @@ class ModelTestsController < ApplicationController
       text += "validates :#{col.name}"
       if col.presence
         if col.data_type == 'boolean'
-          text += ',
-            :acceptance => true' if col.presence
+          text += ', :acceptance => true' if col.presence
         else
-          text += ',
-            :presence => true' if col.presence
+          text += ', :presence => true' if col.presence
         end
       end
 

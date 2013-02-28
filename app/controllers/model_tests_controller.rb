@@ -18,6 +18,8 @@ class ModelTestsController < ApplicationController
       @result = "<h3>Rspec Tests</h3><textarea style='width:98%; height:200px'>#{build_model_tests}</textarea>"
       @result += "<h3>Attributes Accessible</h3><textarea style='width:98%; height:60px'>#{build_attr_accessible}</textarea>"
       @result += "<h3>Rails Generator String</h3><textarea style='width:98%; height:60px'>#{build_rails_generator}</textarea>"
+      @result += "<h3>Rails Model Validations</h3><textarea style='width:98%; height:200px'>#{build_model_validations}</textarea>"
+
       @result = @result.html_safe
     end
 
@@ -193,95 +195,45 @@ class ModelTestsController < ApplicationController
     text = ''
     text += 'attr_accessible '
 
-    text += @model_test.model_columns.select {|col| col.mass_assign }.map {|col| ":#{col.name}"}.join(', ')
+    text += @model_test.model_columns.select { |col| col.mass_assign }.map { |col| ":#{col.name}" }.join(', ')
     text
   end
 
-  ## ====================================================
-  ##                Model Methods
-  ## ====================================================
-  #def build_model
-  #  @model_test.model_columns.each do |col|
-  #    col.name = col.name.tableize.singularize unless ModelColumn.plural_exception?(col.name)
-  #  end
-  #
-  #  @model_test.name = @model_test.name.titleize.singularize
-  #  @result = "" if @result.nil?
-  #  @result += "class ModelTest < ActiveRecord::Base #{@model_test.name} do\r\r"
-  #  model_mass_assign
-  #  model_indexes
-  #  model_associations
-  #  @result += "  context \"Validations\" do\r\r"
-  #  model_presence
-  #  model_length
-  #  model_uniqueness
-  #  @result += "  end\r\r"
-  #  @result += "end"
-  #end
-  #
-  #def model_associations
-  #  @result += "  context \"Associations\" do\r"
-  #  @model_test.model_associations.each do |asc|
-  #    case asc.type
-  #      when "have_one"
-  #        tb = asc.related_table.singularize
-  #      when "have_many"
-  #        tb = asc.related_table.pluralize
-  #      when "have_and_belong_to_many"
-  #        tb = asc.related_table.pluralize
-  #      when "belong_to"
-  #        tb = asc.related_table.singularize
-  #      else
-  #        tb = asc.related_table.singularize
-  #    end
-  #    asc.related_table = tb.downcase
-  #    @result += "    it { should #{asc.type} :#{asc.related_table} }\r"
-  #  end
-  #
-  #  @result += "  end\r\r"
-  #end
-  #
-  #def model_mass_assign
-  #  @result += "  context \"Mass Assignment\" do\r"
-  #  @model_test.model_columns.each do |col|
-  #    @result += "    it { should allow_mass_assignment_of :#{col.name} }\r" if col.mass_assign
-  #  end
-  #  @result += "  end\r\r"
-  #end
-  #
-  #def model_indexes
-  #  @result += "  context \"Indexes\" do\r"
-  #  @model_test.model_columns.each do |col|
-  #    @result += "    it { should have_db_index :#{col.name} }\r" if col.db_index
-  #  end
-  #  @result += "  end\r\r"
-  #end
-  #
-  #def model_presence
-  #  @result += "    context \"Presence\" do\r"
-  #  @model_test.model_columns.each do |col|
-  #    unless col.required == "no"
-  #      @result += "      it { should validate_#{col.required} :#{col.name} }\r"
-  #    end
-  #  end
-  #  @result += "    end\r\r"
-  #end
-  #
-  #def model_uniqueness
-  #  @result += "    context \"Uniqueness\" do\r"
-  #  @model_test.model_columns.each do |col|
-  #    @result += "      it { should validate_uniqueness_of :#{col.name} }\r" if col.unique
-  #  end
-  #  @result += "    end\r\r"
-  #end
-  #
-  #def model_length
-  #  @result += "    context \"Length\" do\r"
-  #  @model_test.model_columns.each do |col|
-  #    @result += "      it { should ensure_length_of(:#{col.name}).is_at_least(#{col.min_length}) }\r" if col.min_length
-  #    @result += "      it { should ensure_length_of(:#{col.name}).is_at_most(#{col.max_length}) }\r" if col.max_length
-  #  end
-  #  @result += "    end\r\r"
-  #end
+
+  # ====================================================
+  #                Model Validations
+  # ====================================================
+
+  def build_model_validations
+    text = ''
+    @model_test.model_columns.each do |col|
+      text += "validates :#{col.name}"
+      if col.presence
+        if col.data_type == 'boolean'
+          text += ',
+            :acceptance => true' if col.presence
+        else
+          text += ',
+            :presence => true' if col.presence
+        end
+      end
+
+      text += ',
+            :uniqueness => true' if col.unique
+      if col.min_length > 0 || col.max_length > 0
+        text += ',
+            :length => {'
+        text += ":minimum => #{col.min_length}" if col.min_length > 0
+        text += ', ' if col.min_length > 0 && col.max_length > 0
+        text += ":maximum => #{col.max_length}" if col.max_length > 0
+        text += '}'
+      end
+      text += ',
+            :numericality => true' if col.data_type.in? %w[decimal float integer]
+    end
+    return text
+
+  end
+
 
 end

@@ -219,20 +219,21 @@ class ModelTestsController < ApplicationController
       end
 
       text += ',
-            :uniqueness => true' if col.unique
-      if col.min_length > 0 || col.max_length > 0
+            #:uniqueness => true' if col.unique
+      if col.min_length && col.min_length > 0 || col.max_length && col.max_length > 0
         text += ',
             :length => {'
-        text += ":minimum => #{col.min_length}" if col.min_length > 0
-        text += ', ' if col.min_length > 0 && col.max_length > 0
-        text += ":maximum => #{col.max_length}" if col.max_length > 0
+        text += ":minimum => #{col.min_length}" if col.min_length && col.min_length > 0
+        text += ', ' if col.min_length && col.min_length > 0 && col.max_length && col.max_length > 0
+        text += ":maximum => #{col.max_length}" if col.max_length && col.max_length > 0
         text += '}'
       end
       text += ',
             :numericality => true' if col.data_type.in? %w[decimal float integer]
+      text += "\r"
     end
-    return text
 
+    text
   end
 
 

@@ -106,7 +106,7 @@ class ModelTestsController < ApplicationController
     @result += "  context 'Associations' do\r"
     @model_test.model_associations.each do |asc|
       error_log 'relationship name', asc.model_relationship_name
-      @result += "    it { should #{asc.model_relationship_name} :#{asc.model_relationship_name} }\r"
+      @result += "    it { should #{asc.relationship_type} :#{asc.model_relationship_name} }\r"
     end
 
     @result += "  end\r\r"
@@ -188,7 +188,11 @@ class ModelTestsController < ApplicationController
     text += @model_test.name
 
     @model_test.model_columns.each do |col|
-      text += " #{col.name}:#{col.data_type}"
+      if col.data_type = 'references'
+        text += " #{col.name.chop.chop.chop}:#{col.data_type}"
+      else
+        text += " #{col.name}:#{col.data_type}"
+      end
     end
     text
   end

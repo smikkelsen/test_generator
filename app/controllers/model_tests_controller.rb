@@ -15,10 +15,18 @@ class ModelTestsController < ApplicationController
     @model_test = ModelTest.find(params[:id])
     @model_tests = ModelTest.find_all_by_project_id(@model_test.project_id)
     if @role == "dev"
-      @result = "<h3>Rspec Tests</h3><textarea style='width:98%; height:200px'>#{build_model_tests}</textarea>"
-      @result += "<h3>Attributes Accessible</h3><textarea style='width:98%; height:60px'>#{build_attr_accessible}</textarea>"
-      @result += "<h3>Rails Generator String</h3><textarea style='width:98%; height:60px'>#{build_rails_generator}</textarea>"
-      @result += "<h3>Rails Model Validations</h3><textarea style='width:98%; height:200px'>#{build_model_validations}</textarea>"
+      @result = ''
+      @result += '<div id="accordion">'
+      @result += "\r"
+
+      @result += "<h3>Rails Generator String</h3><div><textarea style='width:98%; height:60px;'>#{build_rails_generator}</textarea></div>"
+      @result += "<h3>Attributes Accessible</h3><div><textarea style='width:98%; height:60px;'>#{build_attr_accessible}</textarea></div>"
+      @result += "<h3>Rails Model Validations</h3><div><textarea style='width:98%; height:200px;'>#{build_model_validations}</textarea></div>"
+      @result += "<h3>Rails Migrations</h3><div><textarea style='width:98%; height:200px;'>#{build_migrations}</textarea></div>"
+      @result += "<h3>Rspec Tests</h3><div><textarea style='width:98%; height:200px;'>#{build_model_tests}</textarea></div>"
+      @result += "<h3>Rspec Factory</h3><div><textarea style='width:98%; height:200px;'>#{build_model_factory}</textarea></div>"
+
+      @result += '</div>'
 
       @result = @result.html_safe
     end
@@ -80,12 +88,8 @@ class ModelTestsController < ApplicationController
   #                Test Methods
   # ====================================================
   def build_model_tests
-    @model_test.model_columns.each do |col|
-      col.name = col.name.tableize.singularize unless ModelColumn.plural_exception?(col.name)
-    end
 
-    #@model_test.name = @model_test.name.titleize.singularize
-    @result = '' if @result.nil?
+    @result = ''
     @result += "require 'spec_helper'\r\rdescribe #{@model_test.name} do\r\r"
     model_mass_assign_test
     model_indexes_test
@@ -95,28 +99,14 @@ class ModelTestsController < ApplicationController
     model_length_test
     model_uniqueness_test
     @result += "  end\r\r"
-    @result += "end"
+    @result += 'end'
   end
 
   def model_associations_test
     @result += "  context 'Associations' do\r"
     @model_test.model_associations.each do |asc|
-      related_table = ModelTest.find_by_id(asc.related_model_test_id)
-      related_table_name = related_table.name
-      case asc.relationship_type
-        when "have_one"
-          tb = related_table_name.singularize
-        when "have_many"
-          tb = related_table_name.pluralize
-        when "have_and_belong_to_many"
-          tb = related_table_name.pluralize
-        when "belong_to"
-          tb = related_table_name.singularize
-        else
-          tb = related_table_name.singularize
-      end
-      related_table_name = tb.downcase
-      @result += "    it { should #{asc.relationship_type} :#{related_table_name} }\r"
+      error_log 'relationship name', asc.model_relationship_name
+      @result += "    it { should #{asc.model_relationship_name} :#{asc.model_relationship_name} }\r"
     end
 
     @result += "  end\r\r"
@@ -223,7 +213,7 @@ class ModelTestsController < ApplicationController
       end
 
       text += ',
-            #:uniqueness => true' if col.unique
+            :uniqueness => true' if col.unique
       if col.min_length && col.min_length > 0 || col.max_length && col.max_length > 0
         text += ',
             :length => {'
@@ -240,5 +230,56 @@ class ModelTestsController < ApplicationController
     text
   end
 
+  # ====================================================
+  #                     Migrations
+  # ====================================================
+
+  def build_migrations
+    text = ''
+    text += "create_table :#{@model_test.name.tableize} do |t|\r"
+    @model_test.model_columns.each do |col|
+      text += "  t.#{col.data_type} :#{col.name}"
+      text += ', :null => false' if col.presence
+      text += ", :limit => #{col.max_length}" if col.max_length
+      text += "\r"
+    end
+    text += "\r"
+    text += "  t.timestamps\r"
+    text += "end\r"
+
+    @model_test.model_columns.each do |col|
+      text += "add_index :#{@model_test.name.tableize}, :#{col.name}\r" if col.db_index
+      text += "add_index :#{@model_test.name.tableize}, :#{col.name}, :unique => true\r" if col.unique
+    end
+    text
+  end
+
+  # ====================================================
+  #                     Migrations
+  # ====================================================
+
+  def build_model_factory
+    text = ''
+    text += "# Read about factories at http://github.com/thoughtbot/factory_girl\r"
+    text += "FactoryGirl.define do\r"
+    text += "  factory :#{@model_test.name.tableize} do\r"
+    @model_test.model_columns.each do |col|
+      text += "    #{col.data_type} ''\r"
+    end
+    text += "  end\r"
+    text += "end\r"
+
+    text
+  end
+
 
 end
+
+#
+## Read about factories at http://github.com/thoughtbot/factory_girl
+#FactoryGirl.define do
+#  factory :map_api_users_domains do
+#    api_user_id 1
+#    domain_id 1
+#  end
+#end

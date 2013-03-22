@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.all
 //= require jquery_nested_form
 //= require_tree .
 
@@ -32,6 +33,12 @@ $(document).ready(function () {
     $(".nested_form_attributes").on("click", ".btnDel", function () {
         var row = $(this).closest(".fields");
         row.remove();
+    });
+
+    $( "#accordion" ).accordion({
+        heightStyle: "content",
+        collapsible: true,
+        active: false
     });
 
 });

@@ -1,9 +1,9 @@
 <%= nested_form_for(@model_test, :html => {:style => 'width:100%;'}) do |f| %>
     <%= flash_helper(@model_test) %>
-    <h3><span>Model Name</span></h3>
+    <h3 class='form_heading'><span>Model Name</span></h3>
     <%= f.text_field :name %>
 
-    <h3><span>Add Associations</span></h3>
+    <h3 class='form_heading'><span>Add Associations</span></h3>
 
     <div id="associations" class="nested_form_attributes inset">
       <%= f.fields_for :model_associations do |builder| %>
@@ -28,7 +28,7 @@
 
     </div>
 
-    <h3><span>Add Table Columns</span></h3>
+    <h3 class='form_heading'><span>Add Table Columns</span></h3>
 
     <div id="columns" class="nested_form_attributes inset">
       <%= f.fields_for :model_columns do |builder| %>

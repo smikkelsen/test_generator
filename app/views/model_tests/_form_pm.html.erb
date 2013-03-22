@@ -1,10 +1,10 @@
 <%= nested_form_for(@model_test, :html => {:style => 'width:100%;'}) do |f| %>
     <%= flash_helper(@model_test) %>
 
-    <h3><span>Category Name</span></h3>
+    <h3 class='form_heading'><span>Category Name</span></h3>
     <%= f.text_field :name %>
 
-    <h3><span>Add Relationship to Other Categories</span></h3>
+    <h3 class='form_heading'><span>Add Relationship to Other Categories</span></h3>
 
     <div id="associations" class="nested_form_attributes inset">
       <%= f.fields_for :model_associations do |builder| %>
@@ -29,7 +29,7 @@
 
     </div>
 
-    <h3><span>What should this keep track of?</span></h3>
+    <h3 class='form_heading'><span>What should this keep track of?</span></h3>
 
     <div id="columns" class="nested_form_attributes inset">
       <%= f.fields_for :model_columns do |builder| %>

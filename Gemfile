@@ -22,6 +22,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 gem "nested_form"
 
 # To use ActiveModel has_secure_password

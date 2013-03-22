@@ -4,6 +4,8 @@ class ModelColumn < ActiveRecord::Base
 
   validates :name, :presence => true
 
+  before_save :format_name
+
   #REQUIRED_OPTIONS = [["No", "no"], ["Presence", "presence_of"], ["Acceptance", "acceptance_of"]]
   REQUIRED_OPTIONS_PM = [["No", "no"], ["Required Field", "presence_of"], ["Must Check Box", "acceptance_of"]]
   DATA_TYPE_OPTIONS = [
@@ -20,6 +22,22 @@ class ModelColumn < ActiveRecord::Base
       return true if string == exception
     end
     return false
+  end
+
+  private
+  def format_name
+    self.name = self.name.titleize
+    self.name.gsub!(' ', '')
+    self.name = self.name.underscore
+    self.name.downcase!
+
+    if self.data_type == 'references'
+      last_three = self.name.reverse[0..3].reverse
+      unless last_three == '_id'
+        self.name = "#{self.name}_id"
+      end
+    end
+
   end
 
 end

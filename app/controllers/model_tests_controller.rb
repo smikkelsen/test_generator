@@ -264,7 +264,7 @@ class ModelTestsController < ApplicationController
     text += "FactoryGirl.define do\r"
     text += "  factory :#{@model_test.name.tableize} do\r"
     @model_test.model_columns.each do |col|
-      text += "    #{col.data_type} ''\r"
+      text += "    #{col.name} ''\r"
     end
     text += "  end\r"
     text += "end\r"

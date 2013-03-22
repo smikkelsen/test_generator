@@ -138,6 +138,8 @@ class ModelTestsController < ApplicationController
 
   def model_presence_test
     @result += "    context 'Presence' do\r"
+    @result += "      #subject { create(:#{@model_test.name.underscore.singularize}) }\r\r"
+
     @model_test.model_columns.each do |col|
       if col.required
         if col.data_type == "boolean"
@@ -152,6 +154,8 @@ class ModelTestsController < ApplicationController
 
   def model_uniqueness_test
     @result += "    context 'Uniqueness' do\r"
+    @result += "      #subject { create(:#{@model_test.name.underscore.singularize}) }\r\r"
+
     @model_test.model_columns.each do |col|
       if col.unique
         @result += "      it { should validate_uniqueness_of :#{col.name} }\r"
@@ -166,6 +170,8 @@ class ModelTestsController < ApplicationController
 
   def model_length_test
     @result += "    context 'Length' do\r"
+    @result += "      #subject { create(:#{@model_test.name.underscore.singularize}) }\r\r"
+
     @model_test.model_columns.each do |col|
       @result += "      it { should ensure_length_of(:#{col.name}).is_at_least(#{col.min_length}) }\r" if col.min_length
       @result += "      it { should ensure_length_of(:#{col.name}).is_at_most(#{col.max_length}) }\r" if col.max_length
@@ -255,7 +261,7 @@ class ModelTestsController < ApplicationController
   end
 
   # ====================================================
-  #                     Migrations
+  #                     Factory
   # ====================================================
 
   def build_model_factory

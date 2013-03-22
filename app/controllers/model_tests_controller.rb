@@ -188,8 +188,8 @@ class ModelTestsController < ApplicationController
     text += @model_test.name
 
     @model_test.model_columns.each do |col|
-      if col.data_type = 'references'
-        text += " #{col.name.chop.chop.chop}:#{col.data_type}"
+      if col.data_type == 'references'
+        text += " #{col.name.gsub('_id', '')}:#{col.data_type}"
       else
         text += " #{col.name}:#{col.data_type}"
       end
@@ -248,6 +248,7 @@ class ModelTestsController < ApplicationController
     text = ''
     text += "create_table :#{@model_test.name.tableize} do |t|\r"
     @model_test.model_columns.each do |col|
+      col.name.gsub!('_id', '') if col.data_type == 'references'
       text += "  t.#{col.data_type} :#{col.name}"
       text += ', :null => false' if col.presence
       text += ", :limit => #{col.max_length}" if col.max_length

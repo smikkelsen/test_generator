@@ -27,6 +27,7 @@ class ProjectsController < ApplicationController
   def show
     @project = Project.find(params[:id])
     @model_tests = ModelTest.find_all_by_project_id(@project.id)
+
     if @role == 'dev'
       render 'show_dev'
     else

@@ -44,7 +44,7 @@ class ModelTestsController < ApplicationController
         redirect_to project_path(@model_test.project_id)
       end
     else
-      render action: "new"
+      render :action => "new"
     end
   end
 
@@ -52,9 +52,9 @@ class ModelTestsController < ApplicationController
   def update
     @model_test = ModelTest.find(params[:id])
     @model_test.update_attributes(params[:model_test])
-    inspect_obj "model_test", @model_test.model_associations
+    inspect_obj "model_test", @model_test
     if @role == "dev"
-      redirect_to action: "edit"
+      redirect_to :action => "edit"
     else
       redirect_to project_path(@model_test.project_id)
     end
@@ -248,7 +248,7 @@ class ModelTestsController < ApplicationController
     text = ''
     text += "create_table :#{@model_test.name.tableize} do |t|\r"
     @model_test.model_columns.each do |col|
-      col.name.gsub!('_id', '') if col.data_type == 'references'
+      col.name.gsub('_id', '') if col.data_type == 'references'
       text += "  t.#{col.data_type} :#{col.name}"
       text += ', :null => false' if col.presence
       text += ", :limit => #{col.max_length}" if col.max_length

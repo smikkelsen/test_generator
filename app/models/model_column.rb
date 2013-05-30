@@ -26,13 +26,17 @@ class ModelColumn < ActiveRecord::Base
 
   private
   def format_name
-    self.name = self.name.titleize
+    last_three = self.name.reverse[0..2].reverse
+    id_it = true if last_three == '_id'
+    self.name = self.name.titleize    # this removes _id
+
+    self.name = self.name + '_id' if id_it  # this puts id back on if it was there
     self.name.gsub!(' ', '')
     self.name = self.name.underscore
     self.name.downcase!
 
     if self.data_type == 'references'
-      last_three = self.name.reverse[0..3].reverse
+      last_three = self.name.reverse[0..2].reverse
       unless last_three == '_id'
         self.name = "#{self.name}_id"
       end

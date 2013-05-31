@@ -199,6 +199,8 @@ class ModelTestsController < ApplicationController
 
   def build_attr_accessible
     text = ''
+    text += '# '+'='*10+' ATTRIBUTES ACCESSIBLE '+'='*10+"\n"
+
     text += 'attr_accessible '
 
     text += @model_test.model_columns.select { |col| col.mass_assign }.map { |col| ":#{col.name}" }.join(', ')
@@ -212,6 +214,7 @@ class ModelTestsController < ApplicationController
 
   def build_model_validations
     text = ''
+    text += '# '+'='*15+' VALIDATIONS '+'='*15+"\n"
     @model_test.model_columns.each do |col|
       text += "validates :#{col.name}"
       if col.required

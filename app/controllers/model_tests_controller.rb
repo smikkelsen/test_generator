@@ -270,9 +270,10 @@ class ModelTestsController < ApplicationController
       elsif col.db_index
         text += "  add_index :#{@model_test.name.tableize}, :#{col.name}\r"
       end
-      text += "  end\r"
-      text += "end\r"
+
     end
+    text += "  end\r"
+    text += "end\r"
     text
   end
 

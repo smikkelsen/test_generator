@@ -249,21 +249,29 @@ class ModelTestsController < ApplicationController
 
   def build_migrations
     text = ''
-    text += "create_table :#{@model_test.name.tableize} do |t|\r"
+    text += "class Create#{@model_test.name.pluralize} < ActiveRecord::Migration\r"
+    text += "  def change\r"
+    text += "    create_table :#{@model_test.name.tableize} do |t|\r"
     @model_test.model_columns.each do |col|
       col.name.gsub('_id', '') if col.data_type == 'references'
-      text += "  t.#{col.data_type} :#{col.name}"
+      text += "      t.#{col.data_type} :#{col.name}"
       text += ', :null => false' if col.required
       text += ", :limit => #{col.max_length}" if col.max_length
       text += "\r"
     end
     text += "\r"
-    text += "  t.timestamps\r"
-    text += "end\r"
+    text += "    t.timestamps\r"
+    text += "    end\r"
+
 
     @model_test.model_columns.each do |col|
-      text += "add_index :#{@model_test.name.tableize}, :#{col.name}\r" if col.db_index
-      text += "add_index :#{@model_test.name.tableize}, :#{col.name}, :unique => true\r" if col.unique
+      if col.unique
+        text += "  add_index :#{@model_test.name.tableize}, :#{col.name}, :unique => true\r"
+      elsif col.db_index
+        text += "  add_index :#{@model_test.name.tableize}, :#{col.name}\r"
+      end
+      text += "  end\r"
+      text += "end\r"
     end
     text
   end

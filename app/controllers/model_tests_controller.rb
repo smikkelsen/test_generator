@@ -214,11 +214,11 @@ class ModelTestsController < ApplicationController
     text = ''
     @model_test.model_columns.each do |col|
       text += "validates :#{col.name}"
-      if col.presence
+      if col.required
         if col.data_type == 'boolean'
-          text += ', :acceptance => true' if col.presence
+          text += ', :acceptance => true'
         else
-          text += ', :presence => true' if col.presence
+          text += ', :presence => true'
         end
       end
 
@@ -250,7 +250,7 @@ class ModelTestsController < ApplicationController
     @model_test.model_columns.each do |col|
       col.name.gsub('_id', '') if col.data_type == 'references'
       text += "  t.#{col.data_type} :#{col.name}"
-      text += ', :null => false' if col.presence
+      text += ', :null => false' if col.required
       text += ", :limit => #{col.max_length}" if col.max_length
       text += "\r"
     end

@@ -248,7 +248,7 @@ class ModelTestsController < ApplicationController
         tmp_length[0] ||= 0
         tmp_length[1] ||= 0
         text += ',
-            :format => { :with => /^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1] + '})?$/ }'
+            :format => { :with => /^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1].to_s + '})?$/ }'
       else
         unless col.min_length.blank? && col.max_length.blank?
           text += ',

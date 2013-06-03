@@ -250,12 +250,14 @@ class ModelTestsController < ApplicationController
         text += ',
             :format => { :with => /^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1] + '})?$/ }'
       else
-        if col.min_length && col.min_length.length > 0 || col.max_length.length > 0
+        unless col.min_length.blank? && col.max_length.blank?
           text += ',
             :length => {'
-          text += ":minimum => #{col.min_length}" if col.min_length && col.min_length > 0
-          text += ', ' if col.min_length && col.min_length > 0 && col.max_length.length > 0
-          text += ":maximum => #{col.max_length}" if col.max_length.length > 0
+          unless col.min_length.blank?
+          text += ":minimum => #{col.min_length}"
+          text += ', ' unless col.max_length.blank?
+          end
+          text += ":maximum => #{col.max_length}" unless col.max_length.blank?
           text += '}'
         end
       end
@@ -289,15 +291,15 @@ class ModelTestsController < ApplicationController
           tmp_length = col.max_length.split(',')
           tmp_length[0] ||= 0
           tmp_length[1] ||= 0
-          text += ", :precision => #{tmp_length[0]}, :scale => #{tmp_length[1]}" if col.max_length
+          text += ", :precision => #{tmp_length[0]}, :scale => #{tmp_length[1]}" unless col.max_length.blank?
         else
-          text += ", :limit => #{col.max_length}" if col.max_length
+          text += ", :limit => #{col.max_length}" unless col.max_length.blank?
         end
       end
       text += "\r"
     end
     text += "\r"
-    text += "    t.timestamps\r"
+    text += "    t.timestamps\r" if @model_test.timestamps
     text += "    end\r"
 
 

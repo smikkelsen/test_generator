@@ -2,6 +2,8 @@
     <%= flash_helper(@model_test) %>
     <h3 class='form_heading'><span>Model Name</span></h3>
     <%= f.text_field :name %>
+    <%= f.check_box :timestamps, :class => 'tooltip', :title => I18n.t('model_test.timestamps.tooltip') %>
+    <%= f.label :timestamps, 'Add Timestamp Columns', :class => 'tooltip', :title => I18n.t('model_test.timestamps.tooltip') %>
 
     <h3 class='form_heading'><span>Add Associations</span></h3>
 

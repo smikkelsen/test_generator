@@ -1,5 +1,5 @@
 class ModelTest < ActiveRecord::Base
-  attr_accessible :project_id, :ip_address, :name, :model_associations_attributes, :model_columns_attributes
+  attr_accessible :project_id, :ip_address, :name, :model_associations_attributes, :model_columns_attributes, :timestamps
 
   before_save :format_name
 

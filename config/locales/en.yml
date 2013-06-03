@@ -2,4 +2,25 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  model_test:
+    name:
+      tooltip:
+    data_type:
+      tooltip:
+    mass_assign:
+      tooltip: 'Check this if you would like a getter and setter in your Rails Model'
+    required:
+      tooltip: 'Should the database and model validation require this field?'
+    unique:
+      tooltip: 'Should this field be unique?'
+    unique_scope:
+      tooltip: 'Should the uniqueness be based on a scope? (The same name can only be used on a product once per category). Choose the columns that the uniqueness should be scoped against.'
+    db_index:
+      tooltip: 'Add a database index to this field?'
+    attr_accessor:
+      tooltip: 'Check this if you do not want this field to be a database column, but want it to be part of your rails model.'
+    min_length:
+      tooltip: 'Enter a value here only if you want to force validation with minimum length. (For example, the first name must be at least 2 characters.)'
+    max_length:
+      tooltip: 'Enter a value here if you would like to enforce a max character length on a column. If data type is decimal or float, separate precision and scale by a comma. (9,2 would allow 9 chars before decimal and 2 after)'
+

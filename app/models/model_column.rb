@@ -7,6 +7,7 @@ class ModelColumn < ActiveRecord::Base
 
   before_save :format_name
   before_save :clear_empty_array
+  before_save :format_max_length
 
   #REQUIRED_OPTIONS = [["No", "no"], ["Presence", "presence_of"], ["Acceptance", "acceptance_of"]]
   REQUIRED_OPTIONS_PM = [["No", "no"], ["Required Field", "presence_of"], ["Must Check Box", "acceptance_of"]]
@@ -34,6 +35,10 @@ class ModelColumn < ActiveRecord::Base
   def clear_empty_array
     self.unique_scope.reject!(&:blank?)
     #self.unique_scope.reject!(&:empty?)
+  end
+
+  def format_max_length
+    self.max_length.gsub!(' ', '')
   end
 
   def format_name

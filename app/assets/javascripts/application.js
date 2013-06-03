@@ -65,4 +65,12 @@ $(document).ready(function () {
 //        }
 //    });
 
+    // tool tip
+    $(function () {
+        $(".tooltip").tipTip({
+            defaultPosition: "bottom",
+            edgeOffset: 8
+        });
+    });
+
 });

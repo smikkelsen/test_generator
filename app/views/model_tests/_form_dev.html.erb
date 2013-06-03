@@ -38,7 +38,7 @@
                 <div class="float_left column">
                   <%= builder.label :name %>
                   <br>
-                  <%= builder.text_field :name, :size => 15, :class => "medium" %>
+                  <%= builder.text_field :name, :size => 15, :class => 'medium' %>
                 </div>
                 <div class="float_left column">
                   <%= builder.label :data_type %>
@@ -48,38 +48,38 @@
                 <div class="float_left column">
                   <%= builder.label :mass_assign %>
                   <br>
-                  <%= builder.check_box :mass_assign %>
+                  <%= builder.check_box :mass_assign, :class => 'tooltip', :title => I18n.t('model_test.mass_assign.tooltip') %>
                 </div>
                 <div class="float_left column">
                   <%= builder.label :required %>
                   <br>
-                  <%= builder.check_box :required %>
+                  <%= builder.check_box :required, :class => 'tooltip', :title => I18n.t('model_test.required.tooltip') %>
                 </div>
                 <div class="float_left column">
                   <%= builder.label :unique %>
                   <br>
-                  <%= builder.check_box :unique, :class => 'unique_bool' %>
+                  <%= builder.check_box :unique, :class => 'unique_bool tooltip', :title => I18n.t('model_test.unique.tooltip') %>
                 </div>
 
                 <div class="float_left column">
                   <%= builder.label :db_index %>
                   <br>
-                  <%= builder.check_box :db_index %>
+                  <%= builder.check_box :db_index, :class => 'tooltip', :title => I18n.t('model_test.db_index.tooltip') %>
                 </div>
                 <div class="float_left column">
                   <%= builder.label :attr_accessor %>
                   <br>
-                  <%= builder.check_box :attr_accessor %>
+                  <%= builder.check_box :attr_accessor, :class => 'tooltip', :title => I18n.t('model_test.attr_accessor.tooltip') %>
                 </div>
                 <div class="float_left column">
                   <%= builder.label :min_length %>
                   <br>
-                  <%= builder.text_field :min_length, :size => 4, :class => "tiny" %>
+                  <%= builder.text_field :min_length, :size => 4, :class => 'tiny tooltip', :title => I18n.t('model_test.min_length.tooltip') %>
                 </div>
                 <div class="float_left column">
                   <%= builder.label :max_length %>
                   <br>
-                  <%= builder.text_field :max_length, :size => 4, :class => "tiny" %>
+                  <%= builder.text_field :max_length, :size => 4, :class => 'tiny tooltip', :title => I18n.t('model_test.max_length.tooltip') %>
                 </div>
 
                 <br class="clear_float">

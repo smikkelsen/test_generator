@@ -243,14 +243,23 @@ class ModelTestsController < ApplicationController
           text += "  :uniqueness => {:scope => [#{col.unique_scope.map { |s| ":#{s}" }.join(', ')}]}"
         end
       end
-      if col.min_length && col.min_length > 0 || col.max_length && col.max_length > 0
+      if col.data_type.in? %w[decimal float]
+        tmp_length = col.max_length.split(',')
+        tmp_length[0] ||= 0
+        tmp_length[1] ||= 0
         text += ',
+            :format => { :with => /^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1] + '})?$/ }'
+      else
+        if col.min_length && col.min_length.length > 0 || col.max_length.length > 0
+          text += ',
             :length => {'
-        text += ":minimum => #{col.min_length}" if col.min_length && col.min_length > 0
-        text += ', ' if col.min_length && col.min_length > 0 && col.max_length && col.max_length > 0
-        text += ":maximum => #{col.max_length}" if col.max_length && col.max_length > 0
-        text += '}'
+          text += ":minimum => #{col.min_length}" if col.min_length && col.min_length > 0
+          text += ', ' if col.min_length && col.min_length > 0 && col.max_length.length > 0
+          text += ":maximum => #{col.max_length}" if col.max_length.length > 0
+          text += '}'
+        end
       end
+
       text += ',
             :numericality => true' if col.data_type.in? %w[decimal float integer]
       text += "\r"
@@ -275,7 +284,16 @@ class ModelTestsController < ApplicationController
       col.name.gsub('_id', '') if col.data_type == 'references'
       text += "      t.#{col.data_type} :#{col.name}"
       text += ', :null => false' if col.required
-      text += ", :limit => #{col.max_length}" if col.max_length
+      if col.max_length
+        if col.data_type == 'decimal' || col.data_type == 'float'
+          tmp_length = col.max_length.split(',')
+          tmp_length[0] ||= 0
+          tmp_length[1] ||= 0
+          text += ", :precision => #{tmp_length[0]}, :scale => #{tmp_length[1]}" if col.max_length
+        else
+          text += ", :limit => #{col.max_length}" if col.max_length
+        end
+      end
       text += "\r"
     end
     text += "\r"

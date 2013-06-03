@@ -240,7 +240,7 @@ class ModelTestsController < ApplicationController
           text += ',
             :uniqueness => true'
         else
-          text += "  :uniqueness => {:scope => [#{col.unique_scope.map! { |s| ":#{s}" }.join(', ')}]}\r"
+          text += "  :uniqueness => {:scope => [#{col.unique_scope.map { |s| ":#{s}" }.join(', ')}]}"
         end
       end
       if col.min_length && col.min_length > 0 || col.max_length && col.max_length > 0

@@ -33,6 +33,7 @@ class ModelColumn < ActiveRecord::Base
 
   def clear_empty_array
     self.unique_scope.reject!(&:blank?)
+    #self.unique_scope.reject!(&:empty?)
   end
 
   def format_name

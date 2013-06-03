@@ -198,12 +198,21 @@ class ModelTestsController < ApplicationController
   end
 
   def build_attr_accessible
+    accessible = @model_test.model_columns.by_accessor(false)
+    accessor = @model_test.model_columns.by_accessor(true)
+
     text = ''
     text += '# '+'='*10+' ATTRIBUTES ACCESSIBLE '+'='*10+"\n"
 
     text += 'attr_accessible '
 
-    text += @model_test.model_columns.select { |col| col.mass_assign }.map { |col| ":#{col.name}" }.join(', ')
+    text += accessible.select { |col| col.mass_assign }.map { |col| ":#{col.name}" }.join(', ')
+    text += "\n\n"
+    text += '# '+'='*11+' ATTRIBUTES ACCESSOR '+'='*11+"\n"
+
+    text += 'attr_accessible '
+
+    text += accessor.map { |col| ":#{col.name}" }.join(', ')
     text
   end
 
@@ -225,8 +234,15 @@ class ModelTestsController < ApplicationController
         end
       end
 
-      text += ',
-            :uniqueness => true' if col.unique
+      #:uniqueness => {:scope => [test, something]}
+      if col.unique
+        if col.unique_scope.count < 1
+          text += ',
+            :uniqueness => true'
+        else
+          text += "  :uniqueness => {:scope => [#{col.unique_scope.map! { |s| ":#{s}" }.join(', ')}]}\r"
+        end
+      end
       if col.min_length && col.min_length > 0 || col.max_length && col.max_length > 0
         text += ',
             :length => {'
@@ -243,16 +259,19 @@ class ModelTestsController < ApplicationController
     text
   end
 
+
   # ====================================================
   #                     Migrations
   # ====================================================
 
   def build_migrations
+    columns = @model_test.model_columns.by_accessor(false)
+
     text = ''
     text += "class Create#{@model_test.name.pluralize} < ActiveRecord::Migration\r"
     text += "  def change\r"
     text += "    create_table :#{@model_test.name.tableize} do |t|\r"
-    @model_test.model_columns.each do |col|
+    columns.each do |col|
       col.name.gsub('_id', '') if col.data_type == 'references'
       text += "      t.#{col.data_type} :#{col.name}"
       text += ', :null => false' if col.required
@@ -264,9 +283,14 @@ class ModelTestsController < ApplicationController
     text += "    end\r"
 
 
-    @model_test.model_columns.each do |col|
+    columns.each do |col|
+
       if col.unique
-        text += "  add_index :#{@model_test.name.tableize}, :#{col.name}, :unique => true\r"
+        if col.unique_scope.count < 1
+          text += "  add_index :#{@model_test.name.tableize}, :#{col.name}, :unique => true\r"
+        else
+          text += "  add_index :#{@model_test.name.tableize}, [#{col.name}, #{col.unique_scope.join(', ')}], :unique => true, :name => 'unique_#{col.name}'\r"
+        end
       elsif col.db_index
         text += "  add_index :#{@model_test.name.tableize}, :#{col.name}\r"
       end

@@ -2,6 +2,17 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+@mixin corner($size) {
+  -moz-border-radius: $size;
+  -webkit-border-radius: $size;
+  -khtml-border-radius: $size;
+  border-radius: $size;
+}
+
+.chosen {
+width: 100%;
+}
+
 .float_left {
   float:left;
 }
@@ -24,4 +35,41 @@
 
 .add_nested_fields image {
   margin-top: 15px;
+}
+
+.chzn-choices {
+  @include corner(4px);
+  color: #575757;
+  font-family: Arial, Sans-Serif;
+  font-size: 13px;
+  margin-bottom: 5px;
+  display: block;
+  //padding: 0px !important;
+  border: solid 1px #959492;
+  background-color: #f6f6f6;
+
+  &:focus, &:focus {
+    background-image: none;
+    background-color: #ffffff;
+    border: solid 1px #33677F;
+  }
+
+}
+
+.nested_form_attributes {
+padding: 5px;
+}
+
+.field-row {
+  width: 100%;
+  //margin: 5px;
+  border: 1px #ddd solid;
+
+  &.odd {
+    background-color: #f7f6f8;
+  }
+
+  &.even {
+    background-color: #e6e5e7;
+  }
 }

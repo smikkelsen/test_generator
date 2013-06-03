@@ -14,8 +14,9 @@
 //= require jquery_ujs
 //= require jquery.ui.all
 //= require jquery_nested_form
+//= require chosen-jquery
+//= require chosen
 //= require_tree .
-
 
 
 // model tests
@@ -35,10 +36,33 @@ $(document).ready(function () {
         row.remove();
     });
 
-    $( "#accordion" ).accordion({
+    $("#accordion").accordion({
         heightStyle: "content",
         collapsible: true,
         active: false
+    });
+
+
+    $('.nested_form_attributes').on('click', '.unique_bool', function () {
+        var unique_scope_div = $(this).parent().parent().parent().next().find('.unique_scope');
+        var unique_scope_field = unique_scope_div.find('.chosen');
+        if ($(this).is(':checked') == false) {
+            unique_scope_div.hide();
+            unique_scope_field.val('').trigger("liszt:updated");
+        } else {
+            unique_scope_div.show();
+        }
+    });
+
+    $(".unique_bool").each(function () {
+        var unique_scope_div = $(this).parent().parent().parent().next().find('.unique_scope');
+        var unique_scope_field = unique_scope_div.find('.chosen');
+        if ($(this).is(':checked') == false) {
+            unique_scope_div.hide();
+            unique_scope_field.val('').trigger("liszt:updated");
+        } else {
+            unique_scope_div.show();
+        }
     });
 
 });

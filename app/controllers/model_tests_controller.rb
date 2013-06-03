@@ -244,18 +244,20 @@ class ModelTestsController < ApplicationController
         end
       end
       if col.data_type.in? %w[decimal float]
-        tmp_length = col.max_length.split(',')
-        tmp_length[0] ||= 0
-        tmp_length[1] ||= 0
-        text += ',
+        unless col.max_length.blank?
+          tmp_length = col.max_length.split(',')
+          tmp_length[0] ||= 0
+          tmp_length[1] ||= 0
+          text += ',
             :format => { :with => /^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1].to_s + '})?$/ }'
+        end
       else
         unless col.min_length.blank? && col.max_length.blank?
           text += ',
             :length => {'
           unless col.min_length.blank?
-          text += ":minimum => #{col.min_length}"
-          text += ', ' unless col.max_length.blank?
+            text += ":minimum => #{col.min_length}"
+            text += ', ' unless col.max_length.blank?
           end
           text += ":maximum => #{col.max_length}" unless col.max_length.blank?
           text += '}'

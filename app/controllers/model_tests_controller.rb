@@ -185,7 +185,7 @@ class ModelTestsController < ApplicationController
         tmp_length = col.max_length.split(',')
         tmp_length[0] ||= 0
         tmp_length[1] ||= 0
-        @result += "      it { should validate_format_of(:#{col.name}).with(#{'/^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1].to_s + '}})?$/'}) \r" unless col.max_length.blank?
+        @result += "      it { should validate_format_of(:#{col.name}).with(#{'/^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1].to_s + '}})?$/'}) }\r" unless col.max_length.blank?
       else
         @result += "      it { should ensure_length_of(:#{col.name}).is_at_least(#{col.min_length}) }\r" unless col.min_length.blank?
         @result += "      it { should ensure_length_of(:#{col.name}).is_at_most(#{col.max_length}) }\r" unless col.max_length.blank?

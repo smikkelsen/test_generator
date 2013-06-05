@@ -350,7 +350,7 @@ class ModelTestsController < ApplicationController
         if col.unique_scope.count < 1
           text += "  add_index :#{@model_test.name.tableize}, :#{col.name}, :unique => true\r"
         else
-          text += "  add_index :#{@model_test.name.tableize}, [#{col.name}, #{col.unique_scope.join(', ')}], :unique => true, :name => 'unique_#{col.name}'\r"
+          text += "  add_index :#{@model_test.name.tableize}, [#{col.unique_scope.map { |s| ":#{s}" }.join(', ')}], :unique => true, :name => 'unique_#{col.name}'\r"
         end
       elsif col.db_index
         text += "  add_index :#{@model_test.name.tableize}, :#{col.name}\r"

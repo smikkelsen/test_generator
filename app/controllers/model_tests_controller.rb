@@ -160,11 +160,15 @@ class ModelTestsController < ApplicationController
 
     @model_test.model_columns.each do |col|
       if col.unique
-        @result += "      it { should validate_uniqueness_of :#{col.name} }\r"
-        @result += "      it { should have_db_index(:#{col.name}).unique(true) }\r"
+        if col.data_type.in? %w[decimal float]
+          @result += "      it { should validate_uniqueness_of (:#{col.name}).scoped_to(#{col.unique_scope.map { |s| ":#{s}" }.join(', ')})\r"
+        else
+          @result += "      it { should validate_uniqueness_of :#{col.name} }\r"
+        end
+        @result += "      it { should have_db_index(:#{col.name}).unique(true) }\r" unless col.attr_accessor
       else
         @result += "      it { should_not validate_uniqueness_of :#{col.name} }\r"
-        @result += "      it { should_not have_db_index(:#{col.name}).unique(true) }\r"
+        @result += "      it { should_not have_db_index(:#{col.name}).unique(true) }\r" unless col.attr_accessor
       end
     end
     @result += "    end\r\r"
@@ -175,8 +179,16 @@ class ModelTestsController < ApplicationController
     @result += "      #subject { create(:#{@model_test.name.underscore.singularize}) }\r\r"
 
     @model_test.model_columns.each do |col|
-      @result += "      it { should ensure_length_of(:#{col.name}).is_at_least(#{col.min_length}) }\r" if col.min_length
-      @result += "      it { should ensure_length_of(:#{col.name}).is_at_most(#{col.max_length}) }\r" if col.max_length
+      if col.data_type.in? %w[decimal float]
+        tmp_length = col.max_length.split(',')
+        tmp_length[0] ||= 0
+        tmp_length[1] ||= 0
+        @result += "      it { should validate_format_of#{col.name}).with(#{'/^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1].to_s + '}})?$/'}) \r" unless col.max_length.blank?
+      else
+        @result += "      it { should ensure_length_of(:#{col.name}).is_at_least(#{col.min_length}) }\r" unless col.min_length.blank?
+        @result += "      it { should ensure_length_of(:#{col.name}).is_at_most(#{col.max_length}) }\r" unless col.max_length.blank?
+      end
+
     end
     @result += "    end\r\r"
   end

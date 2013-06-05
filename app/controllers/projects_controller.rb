@@ -26,7 +26,8 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   def show
     @project = Project.find(params[:id])
-    @model_tests = ModelTest.find_all_by_project_id(@project.id)
+    @title = @project.name
+    @model_tests = ModelTest.find_all_by_project_id(@project.id).sort_by!(&:name)
 
     if @role == 'dev'
       render 'show_dev'
@@ -44,6 +45,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1/edit
   def edit
     @project = Project.find(params[:id])
+    @title = @project.name
   end
 
   # POST /projects

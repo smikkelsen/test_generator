@@ -13,18 +13,20 @@ class ModelTestsController < ApplicationController
   # GET /model_tests/1/edit
   def edit
     @model_test = ModelTest.find(params[:id])
+    @title = @model_test.name
     @model_tests = ModelTest.find_all_by_project_id(@model_test.project_id)
     if @role == "dev"
       @result = ''
       @result += '<div id="accordion">'
       @result += "\r"
 
-      @result += "<h3>Rails Generator String</h3><div><textarea style='width:98%; height:60px;'>#{build_rails_generator}</textarea></div>"
-      @result += "<h3>Attributes Accessible</h3><div><textarea style='width:98%; height:60px;'>#{build_attr_accessible}</textarea></div>"
-      @result += "<h3>Rails Model Validations</h3><div><textarea style='width:98%; height:200px;'>#{build_model_validations}</textarea></div>"
-      @result += "<h3>Rails Migrations</h3><div><textarea style='width:98%; height:200px;'>#{build_migrations}</textarea></div>"
-      @result += "<h3>Rspec Tests</h3><div><textarea style='width:98%; height:200px;'>#{build_model_tests}</textarea></div>"
-      @result += "<h3>Rspec Factory</h3><div><textarea style='width:98%; height:200px;'>#{build_model_factory}</textarea></div>"
+      @result += "<h3>Rails Generator String</h3><div><textarea style='width:98%; height:60px;' id='text-generator'>#{build_rails_generator}</textarea></div>"
+      @result += "<h3>Model</h3><div><textarea style='width:98%; height:300px;' id='text-model'>#{build_full_model}</textarea></div>"
+      @result += "<h3>Model - Attributes Accessible</h3><div><textarea style='width:98%; height:100px;' id='text-attributes'>#{build_attr_accessible}</textarea></div>"
+      @result += "<h3>Model - Validations</h3><div><textarea style='width:98%; height:200px;' id='text-validations'>#{build_model_validations}</textarea></div>"
+      @result += "<h3>Migrations</h3><div><textarea style='width:98%; height:200px;' id='text-migrations'>#{build_migrations}</textarea></div>"
+      @result += "<h3>Rspec - Tests</h3><div><textarea style='width:98%; height:300px;' id='text-tests'>#{build_model_tests}</textarea></div>"
+      @result += "<h3>Rspec - Factory</h3><div><textarea style='width:98%; height:200px;' id='text-factory'>#{build_model_factory}</textarea></div>"
 
       @result += '</div>'
 
@@ -197,25 +199,46 @@ class ModelTestsController < ApplicationController
     text
   end
 
+  # ====================================================
+  #                Attribute Accessible
+  # ====================================================
   def build_attr_accessible
     accessible = @model_test.model_columns.by_accessor(false)
     accessor = @model_test.model_columns.by_accessor(true)
 
     text = ''
-    text += '# '+'='*10+' ATTRIBUTES ACCESSIBLE '+'='*10+"\n"
+    unless accessible.empty?
+      text += '  # '+'='*10+' ATTRIBUTES ACCESSIBLE '+'='*10+"\n"
 
-    text += 'attr_accessible '
+      text += '  attr_accessible '
 
-    text += accessible.select { |col| col.mass_assign }.map { |col| ":#{col.name}" }.join(', ')
+      text += accessible.select { |col| col.mass_assign }.map { |col| ":#{col.name}" }.join(', ')
+    end
+
+    unless accessor.empty?
+      text += "\n\n"
+      text += '  # '+'='*11+' ATTRIBUTES ACCESSOR '+'='*11+"\n"
+
+      text += '  attr_accessor '
+
+      text += accessor.map { |col| ":#{col.name}" }.join(', ')
+    end
     text += "\n\n"
-    text += '# '+'='*11+' ATTRIBUTES ACCESSOR '+'='*11+"\n"
 
-    text += 'attr_accessible '
-
-    text += accessor.map { |col| ":#{col.name}" }.join(', ')
     text
   end
 
+  # ====================================================
+  #                    Full Model
+  # ====================================================
+  def build_full_model
+    text = ''
+    text += "class #{@model_test.name} < ActiveRecord::Base"
+    text += "\r\r"
+    text += build_attr_accessible
+    text += build_model_validations
+    text += 'end'
+  end
 
   # ====================================================
   #                Model Validations
@@ -223,52 +246,54 @@ class ModelTestsController < ApplicationController
 
   def build_model_validations
     text = ''
-    text += '# '+'='*15+' VALIDATIONS '+'='*15+"\n"
+    text += '  # '+'='*15+' VALIDATIONS '+'='*15+"\n"
     @model_test.model_columns.each do |col|
-      text += "validates :#{col.name}"
-      if col.required
-        if col.data_type == 'boolean'
-          text += ', :acceptance => true'
-        else
-          text += ', :presence => true'
-        end
-      end
-
-      #:uniqueness => {:scope => [test, something]}
-      if col.unique
-        if col.unique_scope.count < 1
-          text += ',
-            :uniqueness => true'
-        else
-          text += "  :uniqueness => {:scope => [#{col.unique_scope.map { |s| ":#{s}" }.join(', ')}]}"
-        end
-      end
-      if col.data_type.in? %w[decimal float]
-        unless col.max_length.blank?
-          tmp_length = col.max_length.split(',')
-          tmp_length[0] ||= 0
-          tmp_length[1] ||= 0
-          text += ',
-            :format => { :with => /^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1].to_s + '})?$/ }'
-        end
-      else
-        unless col.min_length.blank? && col.max_length.blank?
-          text += ',
-            :length => {'
-          unless col.min_length.blank?
-            text += ":minimum => #{col.min_length}"
-            text += ', ' unless col.max_length.blank?
+      if col.unique || col.required || !col.min_length.blank? || !col.max_length.blank? || (col.data_type.in? %w[decimal float integer])
+        text += "  validates :#{col.name}"
+        if col.required
+          if col.data_type == 'boolean'
+            text += ', :acceptance => true'
+          else
+            text += ', :presence => true'
           end
-          text += ":maximum => #{col.max_length}" unless col.max_length.blank?
-          text += '}'
         end
-      end
 
-      text += ',
+        #:uniqueness => {:scope => [test, something]}
+        if col.unique
+          if col.unique_scope.count < 1
+            text += ',
+            :uniqueness => true'
+          else
+            text += ",
+            :uniqueness => {:scope => [#{col.unique_scope.map { |s| ":#{s}" }.join(', ')}]}"
+          end
+        end
+        if col.data_type.in? %w[decimal float]
+          unless col.max_length.blank?
+            tmp_length = col.max_length.split(',')
+            tmp_length[0] ||= 0
+            tmp_length[1] ||= 0
+            text += ',
+            :format => { :with => /^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1].to_s + '})?$/ }'
+          end
+        else
+          unless col.min_length.blank? && col.max_length.blank?
+            text += ',
+            :length => {'
+            unless col.min_length.blank?
+              text += ":minimum => #{col.min_length}"
+              text += ', ' unless col.max_length.blank?
+            end
+            text += ":maximum => #{col.max_length}" unless col.max_length.blank?
+            text += '}'
+          end
+        end
+
+        text += ',
             :numericality => true' if col.data_type.in? %w[decimal float integer]
-      text += "\r"
+        text += "\r"
+      end
     end
-
     text
   end
 

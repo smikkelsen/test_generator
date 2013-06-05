@@ -4,6 +4,17 @@
     <div id='panel-body'>
       <center><h2>Edit <%= @model_test.name %></h2></center>
       <%= link_to (image_tag "back-arrow64x64.png", :class => "back_arrow"), project_path(@model_test.project_id) %>
+      <div id='copy-links' style='float:right;'>
+        Copy To Clipboard:
+        <button data-clipboard-target='text-generator' data-clipboard-text='' id='copy-generator'>Rails G</button>
+        <button data-clipboard-target='text-model' data-clipboard-text='' id='copy-model'>Model</button>
+        <button data-clipboard-target='text-attributes' data-clipboard-text='' id='copy-attributes'>Model - Attributes</button>
+        <button data-clipboard-target='text-validations' data-clipboard-text='' id='copy-validations'>Model - Validations</button>
+        <button data-clipboard-target='text-migrations' data-clipboard-text='' id='copy-migrations'>Migrations</button>
+        <button data-clipboard-target='text-tests' data-clipboard-text='' id='copy-tests'>Rspec - Tests</button>
+        <button data-clipboard-target='text-factory' data-clipboard-text='' id='copy-factory'>Rspec - Factory</button>
+      </div>
+
 
       <% if @role == "dev" %>
           <%= render 'form_dev' %>

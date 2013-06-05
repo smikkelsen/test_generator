@@ -3,6 +3,8 @@ class ModelTest < ActiveRecord::Base
 
   before_save :format_name
 
+  belongs_to :project
+
   has_many :model_columns, :dependent => :destroy
   has_many :model_associations, :dependent => :destroy
   accepts_nested_attributes_for :model_associations, :reject_if => lambda { |a| a[:related_model_test_id].blank? }, :allow_destroy => true

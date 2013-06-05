@@ -16,6 +16,7 @@
 //= require jquery_nested_form
 //= require chosen-jquery
 //= require chosen
+//= require zeroclipboard
 //= require_tree .
 
 
@@ -72,5 +73,22 @@ $(document).ready(function () {
             edgeOffset: 8
         });
     });
+
+//    $('#copy-generator').click(function () {
+//        console.log('test');
+//
+//    });
+
+
+    // clipboard
+    var clip_generator = new ZeroClipboard($("#copy-generator"))
+    var clip_model = new ZeroClipboard($("#copy-model"))
+    var clip_attributes = new ZeroClipboard($("#copy-attributes"))
+    var clip_validations = new ZeroClipboard($("#copy-validations"))
+    var clip_migrations = new ZeroClipboard($("#copy-migrations"))
+    var clip_tests = new ZeroClipboard($("#copy-tests"))
+    var clip_factory = new ZeroClipboard($("#copy-factory"))
+
+
 
 });

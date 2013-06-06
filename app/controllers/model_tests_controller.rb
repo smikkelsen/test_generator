@@ -164,7 +164,7 @@ class ModelTestsController < ApplicationController
         if col.unique_scope.count < 1
           @result += "      it { should validate_uniqueness_of :#{col.name} }\r"
         else
-          @result += "      it { should validate_uniqueness_of (:#{col.name}).scoped_to(#{col.unique_scope.map { |s| ":#{s}" }.join(', ')}) }\r"
+          @result += "      it { should validate_uniqueness_of(:#{col.name}).scoped_to(#{col.unique_scope.map { |s| ":#{s}" }.join(', ')}) }\r"
         end
         @result += "      it { should have_db_index(:#{col.name}).unique(true) }\r" unless col.attr_accessor
       else

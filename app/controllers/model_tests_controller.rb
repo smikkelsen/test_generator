@@ -141,7 +141,7 @@ class ModelTestsController < ApplicationController
 
   def model_presence_test
     @result += "    context 'Presence' do\r"
-    @result += "      #subject { create(:#{@model_test.name.underscore.singularize}) }\r\r"
+    @result += "      subject { create(:#{@model_test.name.underscore.singularize}) }\r\r"
 
     @model_test.model_columns.each do |col|
       if col.required
@@ -157,7 +157,7 @@ class ModelTestsController < ApplicationController
 
   def model_uniqueness_test
     @result += "    context 'Uniqueness' do\r"
-    @result += "      #subject { create(:#{@model_test.name.underscore.singularize}) }\r\r"
+    @result += "      subject { create(:#{@model_test.name.underscore.singularize}) }\r\r"
 
     @model_test.model_columns.each do |col|
       if col.unique

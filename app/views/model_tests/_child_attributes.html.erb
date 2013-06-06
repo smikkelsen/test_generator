@@ -1,0 +1,73 @@
+<%= f.fields_for :model_columns do |builder| %>
+    <table class='field-row <%= cycle('odd', 'even') -%>'>
+      <tr>
+        <td>
+          <div class="float_left column">
+            <%= builder.label :name %>
+            <br>
+            <%= builder.text_field :name, :size => 15, :class => 'medium' %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :data_type %>
+            <br>
+            <%= builder.select :data_type, options_for_select(ModelColumn::DATA_TYPE_OPTIONS, builder.object.data_type) %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :mass_assign %>
+            <br>
+            <%= builder.check_box :mass_assign, :class => 'tooltip', :title => I18n.t('model_test.mass_assign.tooltip') %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :required %>
+            <br>
+            <%= builder.check_box :required, :class => 'tooltip', :title => I18n.t('model_test.required.tooltip') %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :unique %>
+            <br>
+            <%= builder.check_box :unique, :class => 'unique_bool tooltip', :title => I18n.t('model_test.unique.tooltip') %>
+          </div>
+
+          <div class="float_left column">
+            <%= builder.label :db_index %>
+            <br>
+            <%= builder.check_box :db_index, :class => 'tooltip', :title => I18n.t('model_test.db_index.tooltip') %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :attr_accessor %>
+            <br>
+            <%= builder.check_box :attr_accessor, :class => 'tooltip', :title => I18n.t('model_test.attr_accessor.tooltip') %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :min_length %>
+            <br>
+            <%= builder.text_field :min_length, :size => 4, :class => 'tiny tooltip', :title => I18n.t('model_test.min_length.tooltip') %>
+          </div>
+          <div class="float_left column">
+            <%= builder.label :max_length %>
+            <br>
+            <%= builder.text_field :max_length, :size => 4, :class => 'tiny tooltip', :title => I18n.t('model_test.max_length.tooltip') %>
+          </div>
+
+          <br class="clear_float">
+        </td>
+        <td>
+          <div class="float_left column">
+            <br>
+            <!--<%= image_tag "delete-icon24x24.png", :class => "btnDel clickable" %>-->
+            <%= builder.link_to_remove image_tag "delete-icon24x24.png" %>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div class="column unique_scope">
+            <%= builder.label :unique_scope %>
+            <br>
+            <%= builder.select :unique_scope, options_from_collection_for_select(@model_test.model_columns, :name, :name, builder.object.unique_scope), {}, {:multiple => true, :class => 'chosen'} %>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+<% end %>

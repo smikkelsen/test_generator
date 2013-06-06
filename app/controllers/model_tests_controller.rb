@@ -421,7 +421,33 @@ class ModelTestsController < ApplicationController
     text += "FactoryGirl.define do\r"
     text += "  factory :#{@model_test.name.tableize} do\r"
     @model_test.model_columns.each do |col|
-      text += "    #{col.name} ''\r"
+
+      case col.data_type
+        when 'boolean'
+          text += "    #{col.name} ''\r"
+        when 'date'
+          text += "    #{col.name} Date.today\r"
+        when 'datetime'
+          text += "    #{col.name} Time.now\r"
+        when 'decimal'
+          text += "    #{col.name} 1.0\r"
+        when 'float'
+          text += "    #{col.name} 1.0\r"
+        when 'integer'
+          text += "    #{col.name} 1\r"
+        when 'primary_key'
+          text += "    #{col.name} 1\r"
+        when 'references'
+          text += "    #{col.name} 1\r"
+        when 'string'
+          text += "    #{col.name} Faker::Lorem.word\r"
+        when 'text'
+          text += "    #{col.name} Faker::Lorem.paragraph\r"
+        when 'time'
+          text += "    #{col.name} Time.now\r"
+        when 'timestamp'
+          text += "    #{col.name} Time.now\r"
+      end
     end
     text += "  end\r"
     text += "end\r"

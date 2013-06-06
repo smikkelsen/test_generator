@@ -419,12 +419,12 @@ class ModelTestsController < ApplicationController
     text = ''
     text += "# Read about factories at http://github.com/thoughtbot/factory_girl\r"
     text += "FactoryGirl.define do\r"
-    text += "  factory :#{@model_test.name.tableize} do\r"
+    text += "  factory :#{@model_test.name.underscore.singularize} do\r"
     @model_test.model_columns.each do |col|
 
       case col.data_type
         when 'boolean'
-          text += "    #{col.name} ''\r"
+          text += "    #{col.name} true\r"
         when 'date'
           text += "    #{col.name} Date.today\r"
         when 'datetime'

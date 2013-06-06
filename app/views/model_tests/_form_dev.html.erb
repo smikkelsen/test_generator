@@ -12,7 +12,7 @@
           <div class="float_left column">
             <%= builder.label :relationship_type %>
             <br>
-            <%= builder.select :relationship_type, options_for_select(ModelAssociation::TYPE_OPTIONS, builder.object.relationship_type) %>
+            <%= builder.select :relationship_type, ModelAssociation::TYPE_OPTIONS.map { |a| [a.last[:name], a.first] } %>
           </div>
           <div class="float_left column">
             <%= builder.label :related_model_test_id %>

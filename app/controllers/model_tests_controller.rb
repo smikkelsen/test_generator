@@ -107,8 +107,7 @@ class ModelTestsController < ApplicationController
   def model_associations_test
     @result += "  context 'Associations' do\r"
     @model_test.model_associations.each do |asc|
-      error_log 'relationship name', asc.model_relationship_name
-      @result += "    it { should #{asc.relationship_type} :#{asc.model_relationship_name} }\r"
+      @result += "    it { should #{asc.test_name} :#{asc.model_relationship_name} }\r"
     end
 
     @result += "  end\r\r"
@@ -222,7 +221,7 @@ class ModelTestsController < ApplicationController
 
     text = ''
     unless accessible.empty?
-      text += '  # '+'='*10+' ATTRIBUTES ACCESSIBLE '+'='*10+"\n"
+      text += '  # '+'='*11+' ATTRIBUTES ACCESSIBLE '+'='*10+"\n"
 
       text += '  attr_accessible '
 
@@ -250,8 +249,25 @@ class ModelTestsController < ApplicationController
     text += "class #{@model_test.name} < ActiveRecord::Base"
     text += "\r\r"
     text += build_attr_accessible
+    text += build_model_associations
+    text += build_model_constants
+    text += build_model_scopes
     text += build_model_validations
+    text+= build_model_private_methods
     text += 'end'
+  end
+
+  # ====================================================
+  #                Model Associations
+  # ====================================================
+  def build_model_associations
+    text = ''
+    text += '  # '+'='*15+' ASSOCIATIONS '+'='*15+"\n"
+    @model_test.model_associations.each do |asc|
+      text += "  #{asc.model_name} :#{asc.model_relationship_name} \r"
+    end
+
+    text += "\r\r"
   end
 
   # ====================================================
@@ -260,7 +276,7 @@ class ModelTestsController < ApplicationController
 
   def build_model_validations
     text = ''
-    text += '  # '+'='*15+' VALIDATIONS '+'='*15+"\n"
+    text += '  # '+'='*16+' VALIDATIONS '+'='*15+"\n"
     @model_test.model_columns.each do |col|
       if col.unique || col.required || !col.min_length.blank? || !col.max_length.blank? || (col.data_type.in? %w[decimal float integer])
         text += "  validates :#{col.name}"
@@ -305,12 +321,44 @@ class ModelTestsController < ApplicationController
 
         text += ',
             :numericality => true' if col.data_type.in? %w[decimal float integer]
-        text += "\r"
+        text += "\r\r"
       end
     end
     text
   end
 
+  # ====================================================
+  #                    Model Scopes
+  # ====================================================
+
+  def build_model_scopes
+    text = ''
+    text += '  # '+'='*18+' SCOPES '+'='*18+"\r\r\r"
+    text
+  end
+
+  # ====================================================
+  #                    Model Constants
+  # ====================================================
+
+  def build_model_constants
+    text = ''
+    text += '  # '+'='*17+' CONSTANTS '+'='*16+"\r\r\r"
+    text
+  end
+
+  # ====================================================
+  #                Model Private Methods
+  # ====================================================
+
+  def build_model_private_methods
+    text = ''
+    text += "\r\r"
+    text += '  # '+'='*14+' PRIVATE METHODS '+'='*13+"\r"
+    text += '  private'
+    text += "\r\r\r"
+    text
+  end
 
   # ====================================================
   #                     Migrations

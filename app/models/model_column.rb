@@ -61,3 +61,5 @@ class ModelColumn < ActiveRecord::Base
   end
 
 end
+
+

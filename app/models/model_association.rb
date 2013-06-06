@@ -5,7 +5,12 @@ class ModelAssociation < ActiveRecord::Base
   validates :related_model_test_id, :presence => true
   validates :relationship_type, :presence => true
 
-  TYPE_OPTIONS = [["Has One", "have_one"], ["Has Many", "have_many"], ["Belongs To", "belong_to"], ["Has and Belongs to Many", "have_and_belong_to_many"]]
+  TYPE_OPTIONS = {
+      1 => {:id => 1, :name => 'Has One', :model => 'has_one', :test => 'have_one'},
+      2 => {:id => 2, :name => 'Has Many', :model => 'has_many', :test => 'have_many'},
+      3 => {:id => 3, :name => 'Belongs To', :model => 'belongs_to', :test => 'belong_to'},
+      4 => {:id => 4, :name => 'Has and Belongs to Many', :model => 'has_and_belongs_to_many', :test => 'have_and_belong_to_many'},
+  }
 
   def model_relationship_name
     related_table = ModelTest.find_by_id(self.related_model_test_id)
@@ -26,6 +31,19 @@ class ModelAssociation < ActiveRecord::Base
     end
     related_table_name = tb.underscore
     return related_table_name.downcase
-   #Rails.logger.debug related_table_name
+    #Rails.logger.debug related_table_name
   end
+
+  def relationship_name
+    TYPE_OPTIONS[self.relationship_type.to_i][:name] unless self.relationship_type.nil?
+  end
+
+  def model_name
+    TYPE_OPTIONS[self.relationship_type.to_i][:model] unless self.relationship_type.nil?
+  end
+
+  def test_name
+    TYPE_OPTIONS[self.relationship_type.to_i][:test] unless self.relationship_type.nil?
+  end
+
 end

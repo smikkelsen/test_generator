@@ -161,7 +161,7 @@ class ModelTestsController < ApplicationController
 
     @model_test.model_columns.each do |col|
       if col.unique
-        if col.data_type.in? %w[decimal float]
+        if col.unique_scope.count < 1
           @result += "      it { should validate_uniqueness_of (:#{col.name}).scoped_to(#{col.unique_scope.map { |s| ":#{s}" }.join(', ')})\r"
         else
           @result += "      it { should validate_uniqueness_of :#{col.name} }\r"

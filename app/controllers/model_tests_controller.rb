@@ -163,10 +163,10 @@ class ModelTestsController < ApplicationController
       if col.unique
         if col.unique_scope.count < 1
           @result += "      it { should validate_uniqueness_of :#{col.name} }\r"
+          @result += "      it { should have_db_index(:#{col.name}).unique(true) }\r" unless col.attr_accessor
         else
           @result += "      it { should validate_uniqueness_of(:#{col.name}).scoped_to(#{col.unique_scope.map { |s| ":#{s}" }.join(', ')}) }\r"
         end
-        @result += "      it { should have_db_index(:#{col.name}).unique(true) }\r" unless col.attr_accessor
       else
         @result += "      it { should_not validate_uniqueness_of :#{col.name} }\r"
         @result += "      it { should_not have_db_index(:#{col.name}).unique(true) }\r" unless col.attr_accessor
@@ -177,7 +177,7 @@ class ModelTestsController < ApplicationController
 
   def model_length_test
     @result += "    context 'Length' do\r"
-    @result += "      #subject { create(:#{@model_test.name.underscore.singularize}) }\r\r"
+    @result += "      subject { create(:#{@model_test.name.underscore.singularize}) }\r\r"
 
     @model_test.model_columns.each do |col|
       if col.data_type.in? %w[decimal float]

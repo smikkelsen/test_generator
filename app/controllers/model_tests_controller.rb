@@ -131,9 +131,9 @@ class ModelTestsController < ApplicationController
     @result += "  context 'Indexes' do\r"
     accessible.each do |col|
       if col.db_index
-        @result += "    it { should have_db_index :#{col.name} }\r"
+        @result += "    it { should have_db_index :#{col.name} }\r" unless col.unique
       else
-        @result += "    it { should_not have_db_index :#{col.name} }\r"
+        @result += "    it { should_not have_db_index :#{col.name} }\r" unless col.unique
       end
     end
     @result += "  end\r\r"

@@ -35,15 +35,15 @@ class ModelAssociation < ActiveRecord::Base
   end
 
   def relationship_name
-    TYPE_OPTIONS[self.relationship_type.to_i][:name] unless self.relationship_type.nil?
+    TYPE_OPTIONS[self.relationship_type.to_i][:name] unless self.relationship_type.nil? rescue ''
   end
 
   def model_name
-    TYPE_OPTIONS[self.relationship_type.to_i][:model] unless self.relationship_type.nil?
+    TYPE_OPTIONS[self.relationship_type.to_i][:model] unless self.relationship_type.nil? rescue ''
   end
 
   def test_name
-    TYPE_OPTIONS[self.relationship_type.to_i][:test] unless self.relationship_type.nil?
+    TYPE_OPTIONS[self.relationship_type.to_i][:test] unless self.relationship_type.nil? rescue ''
   end
 
 end

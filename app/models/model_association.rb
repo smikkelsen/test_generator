@@ -18,13 +18,13 @@ class ModelAssociation < ActiveRecord::Base
     related_table_name = related_table.name
     Rails.logger.debug related_table_name
     case self.relationship_type
-      when "have_one"
+      when "1"
         tb = related_table_name.singularize
-      when "have_many"
+      when "2"
         tb = related_table_name.pluralize
-      when "have_and_belong_to_many"
+      when "4"
         tb = related_table_name.pluralize
-      when "belong_to"
+      when "3"
         tb = related_table_name.singularize
       else
         tb = related_table_name.singularize

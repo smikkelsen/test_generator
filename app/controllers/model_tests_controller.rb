@@ -321,9 +321,10 @@ class ModelTestsController < ApplicationController
 
         text += ',
             :numericality => true' if col.data_type.in? %w[decimal float integer]
-        text += "\r\r"
+        text += "\r"
       end
     end
+    text += "\r"
     text
   end
 

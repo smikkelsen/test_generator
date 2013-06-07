@@ -181,10 +181,14 @@ class ModelTestsController < ApplicationController
 
     @model_test.model_columns.each do |col|
       if col.data_type.in? %w[decimal float]
-        tmp_length = col.max_length.split(',')
-        tmp_length[0] ||= 0
-        tmp_length[1] ||= 0
-        @result += "      it { should validate_format_of(:#{col.name}).with(#{'/^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1].to_s + '}})?$/'}) }\r" unless col.max_length.blank?
+        @result += "      it { should validate_format_of(:#{col.name}).with(#{'/^\d{1,' + col.max_length[0].to_s + '}(\.\d{0,' + col.max_length[1].to_s + '}})?$/'}) }\r" unless col.max_length.blank?
+      elsif col.data_type.in? %w[integer]
+        Rails.logger.debug '=' * 80
+        Rails.logger.debug col.min_length
+        min_range = col.min_length - 1
+        max_range = col.max_length + 1
+        @result += "      it { should_not allow_value(#{(1..min_range).to_a.join('')}).for(:#{col.name}) }\r" unless col.min_length < 1
+        @result += "      it { should_not allow_value(#{(1..max_range).to_a.join('')}).for(:#{col.name}) }\r" unless col.max_length < 1
       else
         @result += "      it { should ensure_length_of(:#{col.name}).is_at_least(#{col.min_length}) }\r" unless col.min_length.blank?
         @result += "      it { should ensure_length_of(:#{col.name}).is_at_most(#{col.max_length}) }\r" unless col.max_length.blank?
@@ -300,11 +304,8 @@ class ModelTestsController < ApplicationController
         end
         if col.data_type.in? %w[decimal float]
           unless col.max_length.blank?
-            tmp_length = col.max_length.split(',')
-            tmp_length[0] ||= 0
-            tmp_length[1] ||= 0
             text += ',
-            :format => { :with => /^\d{1,' + tmp_length[0].to_s + '}(\.\d{0,' + tmp_length[1].to_s + '})?$/ }'
+            :format => { :with => /^\d{1,' + col.max_length[0].to_s + '}(\.\d{0,' + col.max_length[1].to_s + '})?$/ }'
           end
         else
           unless col.min_length.blank? && col.max_length.blank?
@@ -378,10 +379,7 @@ class ModelTestsController < ApplicationController
       text += ', :null => false' if col.required
       if col.max_length
         if col.data_type == 'decimal' || col.data_type == 'float'
-          tmp_length = col.max_length.split(',')
-          tmp_length[0] ||= 0
-          tmp_length[1] ||= 0
-          text += ", :precision => #{tmp_length[0]}, :scale => #{tmp_length[1]}" unless col.max_length.blank?
+          text += ", :precision => #{col.max_length[0]}, :scale => #{col.max_length[1]}" unless col.max_length.blank?
         else
           text += ", :limit => #{col.max_length}" unless col.max_length.blank?
         end

@@ -19,4 +19,5 @@ class ModelTest < ActiveRecord::Base
     self.name.gsub!(' ', '')
   end
 
+
 end

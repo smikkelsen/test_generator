@@ -7,7 +7,6 @@ class ModelColumn < ActiveRecord::Base
 
   before_save :format_name
   before_save :clear_empty_array
-  before_save :format_max_length
 
   #REQUIRED_OPTIONS = [["No", "no"], ["Presence", "presence_of"], ["Acceptance", "acceptance_of"]]
   REQUIRED_OPTIONS_PM = [["No", "no"], ["Required Field", "presence_of"], ["Must Check Box", "acceptance_of"]]
@@ -28,6 +27,36 @@ class ModelColumn < ActiveRecord::Base
       return true if string == exception
     end
     return false
+  end
+
+  def min_length
+    min_length = super()
+    unless min_length.blank?
+      if self.data_type.in? %w[float decimal]
+        min_length.gsub!(' ', '')
+        min_length = min_length.split(',')
+        min_length[0] = min_length[0].to_i ||= 0
+        min_length[1] = min_length[1].to_i ||= 0
+      else
+        min_length = min_length.to_i
+      end
+      min_length
+    end
+  end
+
+  def max_length
+    max_length = super()
+    unless max_length.blank?
+      if self.data_type.in? %w[float decimal]
+        max_length.gsub!(' ', '')
+        max_length = max_length.split(',')
+        max_length[0] = max_length[0].to_i ||= 0
+        max_length[1] = max_length[1].to_i ||= 0
+      else
+        max_length = max_length.to_i
+      end
+      max_length
+    end
   end
 
   private
@@ -59,6 +88,7 @@ class ModelColumn < ActiveRecord::Base
     end
 
   end
+
 
 end
 

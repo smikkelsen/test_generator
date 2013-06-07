@@ -185,10 +185,14 @@ class ModelTestsController < ApplicationController
       elsif col.data_type.in? %w[integer]
         Rails.logger.debug '=' * 80
         Rails.logger.debug col.min_length
-        min_range = col.min_length - 1 unless col.min_length.blank? || col.min_length < 1
-        max_range = col.max_length + 1 unless col.max_length.blank? || col.max_length < 1
-        @result += "      it { should_not allow_value(#{(1..min_range).to_a.join('')}).for(:#{col.name}) }\r" unless col.min_length < 1
-        @result += "      it { should_not allow_value(#{(1..max_range).to_a.join('')}).for(:#{col.name}) }\r" unless col.max_length < 1
+        unless col.min_length.blank? || col.min_length < 1
+          min_range = col.min_length - 1
+          @result += "      it { should_not allow_value(#{(1..min_range).to_a.join('')}).for(:#{col.name}) }\r"
+        end
+        unless col.max_length.blank? || col.max_length < 1
+          max_range = col.max_length + 1
+          @result += "      it { should_not allow_value(#{(1..max_range).to_a.join('')}).for(:#{col.name}) }\r" unless col.max_length < 1
+        end
       else
         @result += "      it { should ensure_length_of(:#{col.name}).is_at_least(#{col.min_length}) }\r" unless col.min_length.blank?
         @result += "      it { should ensure_length_of(:#{col.name}).is_at_most(#{col.max_length}) }\r" unless col.max_length.blank?

@@ -92,7 +92,7 @@ class ModelTestsController < ApplicationController
   def build_model_tests
 
     @result = ''
-    @result += "require 'spec_helper'\r\rdescribe #{@model_test.name} do\r\r"
+    @result += "require 'rails_helper'\r\rRSpec.describe #{@model_test.name}, :type => :model do\r\r"
     model_mass_assign_test
     model_indexes_test
     model_associations_test
